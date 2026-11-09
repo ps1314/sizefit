@@ -1,6 +1,6 @@
 # 推广帖草稿
 
-占位符：`{{TOOL_URL}}` = GitHub Pages 地址（如 `https://<用户名>.github.io/sizefit/`），`{{REPO_URL}}` = 仓库地址，`{{WAITLIST_URL}}` = Tally 表单。
+占位符：`{https://ps1314.github.io/sizefit/}` = GitHub Pages 地址（如 `https://<用户名>.github.io/sizefit/`），`{https://github.com/ps1314/sizefit}` = 仓库地址，`{{WAITLIST_URL}}` = Tally 表单。
 
 发之前注意：
 
@@ -31,7 +31,7 @@ Doing this in spreadsheets is tedious, so I put together a free browser-only too
 
 How are you all handling size-related returns? Fit notes, size quizzes, something else?
 
-> 评论里有人要链接时回复：Here it is: {{TOOL_URL}} — there's sample data if you just want to see the report. Feedback welcome, especially on export formats it doesn't read correctly.
+> 评论里有人要链接时回复：Here it is: {https://ps1314.github.io/sizefit/} — there's sample data if you just want to see the report. Feedback welcome, especially on export formats it doesn't read correctly.
 
 ---
 
@@ -57,7 +57,7 @@ Sharing a process for apparel stores that want to cut size-related returns.
 
 **What to change:** add a fit note on the product page and adjust the size chart by about half a size on the affected measurements (e.g. if M chest is 98 cm and L is 104 cm, and M runs small, move M to ~101 cm).
 
-If it helps, I made a free tool that does this from the CSV exports, entirely in your browser (no upload, no app install, customer personal data is discarded on load): {{TOOL_URL}}
+If it helps, I made a free tool that does this from the CSV exports, entirely in your browser (no upload, no app install, customer personal data is discarded on load): {https://ps1314.github.io/sizefit/}
 
 Curious how other apparel merchants handle this.
 
@@ -84,7 +84,7 @@ I'm testing a narrow idea before building anything bigger.
 
 There's a waitlist button on the report for the paid version — it's free today and that button is purely to measure interest.
 
-Link: {{TOOL_URL}} (sample data included). Would love feedback on the validation plan itself — is "2 of 10 say they'd pay" a meaningful signal, or should I ask for a pre-payment?
+Link: {https://ps1314.github.io/sizefit/} (sample data included). Would love feedback on the validation plan itself — is "2 of 10 say they'd pay" a meaningful signal, or should I ask for a pre-payment?
 
 ---
 
@@ -111,7 +111,7 @@ Link: {{TOOL_URL}} (sample data included). Would love feedback on the validation
 
 #独立站 #Shopify #服装电商 #跨境电商 #退货率 #独立站运营
 
-> 备注：小红书站外链接容易限流，正文不放链接，评论或私信给 {{TOOL_URL}}。
+> 备注：小红书站外链接容易限流，正文不放链接，评论或私信给 {https://ps1314.github.io/sizefit/}。
 
 ---
 
@@ -125,7 +125,7 @@ I came across {{STORE_NAME}} while looking at independent apparel brands on Shop
 
 I'm working on a small free tool for one specific problem: figuring out which sizes of which products run small or large, using the return/exchange data stores already have. It reads your Shopify orders export and a returns export (Shopify, AfterShip, Loop…), runs entirely in the browser (nothing is uploaded, customer details are discarded), and gives you a per-size verdict, a fit note for the product page, and size-chart suggestions.
 
-I'm looking for about 10 apparel stores to try it and tell me honestly whether the output is useful. It takes about 5 minutes: {{TOOL_URL}} (there's sample data if you'd rather see a report first).
+I'm looking for about 10 apparel stores to try it and tell me honestly whether the output is useful. It takes about 5 minutes: {https://ps1314.github.io/sizefit/} (there's sample data if you'd rather see a report first).
 
 If you try it, I'd love two answers:
 1. Did it point at a size problem you didn't already know about?
