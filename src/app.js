@@ -66,6 +66,9 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': 
 
 function renderFiles() {
   $('#filesPanel').hidden = !state.files.length;
+  $('#chosen').innerHTML = state.files.map((f, i) => `
+    <span class="chip"><span class="chip-name">${esc(f.name)}</span>${f.sample ? `<span class="chip-tag">${esc(T('file.sampleTag'))}</span>` : ''}
+      <button type="button" class="chip-x" data-remove="${i}" aria-label="${esc(T('file.remove'))} ${esc(f.name)}" title="${esc(T('file.remove'))}">×</button></span>`).join('');
   $('#files').innerHTML = state.files.map((f, i) => {
     const opts = sel => [`<option value="">${esc(T('file.unused'))}</option>`, ...f.headers.map(h =>
       `<option value="${esc(h)}"${h === sel ? ' selected' : ''}>${esc(h)}</option>`)].join('');
