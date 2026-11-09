@@ -7,7 +7,7 @@ SizeFit is a free, browser-only tool for apparel stores on Shopify. Drop in your
 - Runs entirely in your browser: files are never uploaded. Buyer names, emails, addresses and phone numbers are dropped as soon as the file is read.
 - No sign-up, no app install. Try it with the bundled sample data.
 - Report export to HTML or PDF.
-- The interface is currently in Chinese; fit notes are in English.
+- English and Chinese interface (picked from your browser language, switchable top right). Fit notes are always English, since they're meant for your product pages.
 
 Run locally: `npm start`, then open http://localhost:5173. Tests: `npm test`. No dependencies.
 
@@ -21,6 +21,8 @@ Run locally: `npm start`, then open http://localhost:5173. Tests: `npm test`. No
 - 尺码表修改建议（上传尺码表时给具体数值，如 `M：Chest +3cm（98 → 101）`；没有尺码表时只给方向）
 
 报告可以下载为独立 HTML，或用浏览器「打印 → 存为 PDF」。
+
+界面和报告有中文、英文两套：首次打开时浏览器语言里有 `zh` 开头的就用中文，否则英文；右上角「中文 / EN」可以切换，选择记在 localStorage 里。下载的 HTML 报告用当前语言。fit note 始终是英文（给海外买家看），中文界面下旁边会附一句中文意思。文案都在 `src/i18n.js`，测试会检查两种语言的键是否一致、代码里用到的键是否都存在。
 
 这是一个验证用的版本：纯前端单页，没有依赖，不部署、不接 Shopify App。
 
@@ -39,7 +41,7 @@ npm test           # 单元测试 + 端到端测试（样例 → 报告 → 检�
 npm run fixtures   # 重新生成 fixtures/ 下的样例 CSV（固定随机种子，结果不变）
 
 # 命令行直接出报告
-node scripts/cli-report.js --chart fixtures/size_chart.csv --out report.html \
+node scripts/cli-report.js --lang en --chart fixtures/size_chart.csv --out report.html \
   fixtures/shopify_orders_export.csv fixtures/loop_returns.csv
 ```
 
@@ -52,7 +54,7 @@ node scripts/cli-report.js --chart fixtures/size_chart.csv --out report.html \
 | 配置 | 作用 | 留空时 |
 |---|---|---|
 | `goatcounterCode` | GoatCounter 站点代码（`xxx` 对应 `https://xxx.goatcounter.com`）。无 cookie 的使用统计 | 不加载任何统计脚本 |
-| `waitlistUrl` | 候补名单外部表单链接（如 Tally，需 `https://` 开头） | 报告下方的「每月自动出尺码报告 $19/月 · 加入候补名单」按钮隐藏 |
+| `waitlistUrl` | 登记意向的外部表单链接（如 Tally，需 `https://` 开头） | 报告下方的「想每月自动收到这份报告？」和「留个邮箱，有进展通知我」按钮隐藏 |
 
 开了统计后会记录这些事件（只有事件名，不含文件名和文件内容）：页面打开（GoatCounter 自带的页面浏览）、`upload`、`format/<格式>`、`rows/<50|50-500|500+>`（每个文件的行数分桶）、`report`、`export/html`、`export/pdf`、`sample/<样例名>`、`waitlist`。开启后页面顶部的隐私说明会自动加一句统计说明。
 
@@ -147,7 +149,7 @@ fit note：判定偏差的尺码占已判定尺码的一半以上时写 `Runs sm
 - 原因分类是关键词规则，不是模型；口语化、拼写错误、其他语言会被归为「未知」。`loose`、`short` 这类词在描述版型时也会被算进去。
 - 每个尺码独立判断，没有用相邻尺码互相借力；小店数据量少时大部分尺码会是「样本不足」，这是有意的。
 - 尺码表建议统一按「半个码」给，没有区分围度和长度、没有考虑面料弹性。
-- 界面是中文，fit note 是英文；只支持 CSV（不支持 xlsx）。
+- 只支持 CSV（不支持 xlsx）。退货原因分类只认中英文关键词。
 - 「打印 / 存为 PDF」依赖浏览器打印，排版在 Chrome 上检查过。
 
 ## 目录
@@ -161,7 +163,8 @@ src/formats.js      格式识别、列映射、丢弃个人信息列
 src/analyze.js      汇总和判断规则、fit note、尺码表建议
 src/report.js       报告 HTML
 src/app.js          浏览器交互
-src/config.js       统计代码、候补名单链接（留空即关闭）
+src/config.js       统计代码、登记意向表单链接（留空即关闭）
+src/i18n.js         全部界面和报告文案（中文 / 英文）、语言检测和切换
 src/track.js        GoatCounter 事件
 try/posts.md        推广帖草稿
 serve.js            本地静态服务

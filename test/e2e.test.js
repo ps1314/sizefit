@@ -20,10 +20,10 @@ function piiValues(name) {
   return out;
 }
 
-function run(names) {
+function run(names, lang = 'zh') {
   const files = names.map(n => loadFile(n, read(n)));
   const a = analyze(files, { chartText });
-  const html = renderReportDocument(a, { generatedAt: new Date('2026-11-09T00:00:00Z') });
+  const html = renderReportDocument(a, { lang, generatedAt: new Date('2026-11-09T00:00:00Z') });
   return { files, a, html };
 }
 
@@ -47,11 +47,13 @@ for (const set of [
   ['shopify_orders_export.csv', 'loop_returns.csv'],
   ['dirty_returns.csv'],
 ]) {
-  test(`no PII in report: ${set.join(' + ')}`, () => {
-    const { files, html } = run(set);
-    for (const f of files) assert.ok(f.droppedColumns.length > 0);
-    assertNoPii(set, html);
-  });
+  for (const lang of ['zh', 'en']) {
+    test(`no PII in ${lang} report: ${set.join(' + ')}`, () => {
+      const { files, html } = run(set, lang);
+      for (const f of files) assert.ok(f.droppedColumns.length > 0);
+      assertNoPii(set, html);
+    });
+  }
 }
 
 test('Shopify orders only: refunds give 待确认, never a direction', () => {
@@ -75,6 +77,10 @@ test('AfterShip returns: finds the planted size problems', () => {
   assert.equal(a.products[0].product === 'Everyday Hoodie', false);
   assert.match(html, /Runs small — we recommend sizing up\./);
   assert.match(html, /Chest \+3cm（98 → 101）/);
+  assert.match(html, /意思：整体偏小，建议买大一码/);
+  const en = run(['aftership_returns_export.csv'], 'en').html;
+  assert.match(en, /Runs small — we recommend sizing up\./);
+  assert.match(en, /Chest \+3 cm \(98 → 101\)/);
   // ≥ half of returns attributable to a concrete direction (the validation pass bar)
   assert.ok((a.totals.small + a.totals.large) / a.totals.returns >= 0.5);
 });
@@ -89,7 +95,7 @@ test('Orders + Loop: sales as denominator, Loop exchanges as strongest signal', 
   assert.equal(verdicts(a, 'Ribbed Knit Cardigan').XL, 'large');
   assert.equal(verdicts(a, 'Ribbed Knit Cardigan').S, 'normal');
   const card = a.products.find(p => p.product === 'Ribbed Knit Cardigan');
-  assert.equal(card.fitNote, "Size XL runs large — if you're between sizes, we recommend sizing down.");
+  assert.equal(card.fitNote.text, "Size XL runs large — if you're between sizes, we recommend sizing down.");
 });
 
 test('dirty export: unknown format is guessed, mostly no conclusions', () => {

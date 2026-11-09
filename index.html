@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SizeFit · 尺码偏差分析</title>
+<title>SizeFit</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%231f4fd1'/><path d='M8 22h16M8 16h11M8 10h6' stroke='white' stroke-width='3' stroke-linecap='round'/></svg>">
 <style>
 :root{--ink:#1d2330;--muted:#5d6675;--line:#e3e6eb;--card:#fff;--bg:#f4f5f7;--soft:#eef0f3;--accent:#1f4fd1;--accent-ink:#fff;--ok:#047857;--warn:#9a3412}
@@ -13,7 +13,10 @@ body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 -apple-system
 .wrap{max-width:1080px;margin:0 auto;padding:24px 16px 64px}
 header.top{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
 header.top h1{font-size:22px;margin:0}
-header.top p{margin:0;color:var(--muted)}
+header.top p{margin:0;color:var(--muted);flex:1;min-width:200px}
+.lang{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;align-self:center}
+.lang button{border:none;border-radius:0;padding:4px 10px;font-size:13px;background:var(--card);color:var(--muted)}
+.lang button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);font-weight:600}
 .privacy{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--ok);margin:4px 0 18px}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
 .panel h2{font-size:15px;margin:0 0 10px}
@@ -46,7 +49,6 @@ select{font:inherit;font-size:13px;padding:4px 6px;border:1px solid var(--line);
 .waitlist{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--card);border:1px solid var(--accent);border-radius:12px;padding:16px;margin-top:14px}
 .waitlist[hidden]{display:none}
 .waitlist p{margin:4px 0 0;color:var(--muted);font-size:13px;max-width:560px}
-.waitlist strong{color:var(--ink)}
 .waitlist button{white-space:normal;text-align:left}
 .err{color:var(--warn);font-size:13px;margin-top:8px}
 @media print{
@@ -61,58 +63,61 @@ select{font:inherit;font-size:13px;padding:4px 6px;border:1px solid var(--line);
 <div class="wrap">
   <header class="top no-print">
     <h1>SizeFit</h1>
-    <p>上传 Shopify 订单 / 退货导出，找出哪个款哪个尺码偏大或偏小</p>
+    <p data-i18n="app.tagline"></p>
+    <div class="lang" role="group" data-i18n-label="lang.switch">
+      <button type="button" data-lang="zh" lang="zh-CN">中文</button><button type="button" data-lang="en" lang="en">EN</button>
+    </div>
   </header>
   <div class="privacy no-print">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="flex:none;margin-top:2px"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-    <span>全部在你的浏览器里处理，文件不会上传到任何服务器。买家姓名、邮箱、地址、电话等列在读取时就被丢弃，不保存、不出现在报告里。<span id="analyticsNote" hidden>页面用 GoatCounter 做匿名使用统计（无 cookie），只记录「上传了文件、识别出什么格式、大约多少行、导出了报告」这类事件，不记录文件名和文件内容。</span></span>
+    <span><span data-i18n="app.privacy"></span> <span id="analyticsNote" data-i18n="app.analyticsNote" hidden></span></span>
   </div>
 
   <section class="panel no-print">
-    <h2>1. 上传导出文件</h2>
+    <h2 data-i18n="app.uploadTitle"></h2>
     <div class="drop" id="drop">
-      <p>把 CSV 拖到这里，或 <button type="button" class="primary" id="pick">选择文件</button></p>
-      <p style="margin:0;font-size:13px">支持 Shopify 订单导出、Shopify Returns 报表、AfterShip Returns、Loop，其他工具的 CSV 可手动指定列。可以一次传多份（例如订单 + 退货）。</p>
+      <p><span data-i18n="app.dropPrompt"></span> <button type="button" class="primary" id="pick" data-i18n="app.pick"></button></p>
+      <p style="margin:0;font-size:13px" data-i18n="app.supported"></p>
       <input type="file" id="fileInput" accept=".csv,text/csv" multiple>
     </div>
-    <div class="samples">没有数据？试试样例：
-      <button type="button" data-sample="shopify_orders_export.csv">Shopify 订单导出</button>
-      <button type="button" data-sample="aftership_returns_export.csv">AfterShip 退货</button>
-      <button type="button" data-sample="shopify_orders_export.csv,loop_returns.csv">订单 + Loop 退货</button>
-      <button type="button" data-sample="dirty_returns.csv">原因多为 Other 的脏数据</button>
+    <div class="samples"><span data-i18n="app.samplesLabel"></span>
+      <button type="button" data-sample="shopify_orders_export.csv" data-i18n="app.sample.orders"></button>
+      <button type="button" data-sample="aftership_returns_export.csv" data-i18n="app.sample.aftership"></button>
+      <button type="button" data-sample="shopify_orders_export.csv,loop_returns.csv" data-i18n="app.sample.ordersLoop"></button>
+      <button type="button" data-sample="dirty_returns.csv" data-i18n="app.sample.dirty"></button>
     </div>
   </section>
 
   <section class="panel no-print" id="filesPanel" hidden>
-    <h2>2. 已识别的文件</h2>
+    <h2 data-i18n="app.filesTitle"></h2>
     <div id="files"></div>
   </section>
 
   <section class="panel no-print">
-    <h2>3. 尺码表（可选）</h2>
+    <h2 data-i18n="app.chartTitle"></h2>
     <div class="row">
-      <button type="button" id="pickChart">上传尺码表 CSV</button>
-      <button type="button" class="link" data-sample-chart="size_chart.csv">用样例尺码表</button>
+      <button type="button" id="pickChart" data-i18n="app.chartUpload"></button>
+      <button type="button" class="link" data-sample-chart="size_chart.csv" data-i18n="app.chartSample"></button>
       <span id="chartInfo" class="fmt"></span>
       <input type="file" id="chartInput" accept=".csv,text/csv">
     </div>
-    <p class="fmt" style="margin:8px 0 0">格式：<code>Product, Size, Chest (cm), Waist (cm) …</code>。Product 列可省略（对所有款生效）。没有尺码表时，建议只给方向。</p>
+    <p class="fmt" style="margin:8px 0 0"><span data-i18n="app.chartHintBefore"></span><code>Product, Size, Chest (cm), Waist (cm) …</code><span data-i18n="app.chartHintAfter"></span></p>
   </section>
 
   <div class="exportbar no-print" id="exportbar">
-    <b>报告</b><span class="sp"></span>
-    <button type="button" id="dlHtml">下载 HTML</button>
-    <button type="button" id="print">打印 / 存为 PDF</button>
+    <b data-i18n="app.reportLabel"></b><span class="sp"></span>
+    <button type="button" id="dlHtml" data-i18n="app.downloadHtml"></button>
+    <button type="button" id="print" data-i18n="app.print"></button>
   </div>
   <div id="report"></div>
   <section class="waitlist no-print" id="waitlist" hidden>
     <div>
-      <b>想每个月自动收到这份报告？</b>
-      <p>连上店铺后每月自动出一次尺码报告，新出现的偏大偏小会提醒你。<strong>目前完全免费，不收钱</strong>；点按钮只是登记意向，会打开一个外部表单。</p>
+      <b data-i18n="app.waitlistTitle"></b>
+      <p data-i18n="app.waitlistBody"></p>
     </div>
-    <button type="button" class="primary" id="waitlistBtn">每月自动出尺码报告 $19/月 · 加入候补名单</button>
+    <button type="button" class="primary" id="waitlistBtn" data-i18n="app.waitlistButton"></button>
   </section>
-  <p class="empty no-print" id="empty">上传文件后，报告会出现在这里。</p>
+  <p class="empty no-print" id="empty" data-i18n="app.empty"></p>
 </div>
 <script type="module" src="src/app.js"></script>
 </body>

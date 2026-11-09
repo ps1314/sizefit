@@ -6,9 +6,11 @@ import { analyze } from './analyze.js';
 import { renderReport, renderReportDocument, REPORT_CSS } from './report.js';
 import { CONFIG } from './config.js';
 import { track, trackingEnabled, rowBucket } from './track.js';
+import { t, initialLang, saveLang } from './i18n.js';
 
 const $ = sel => document.querySelector(sel);
-const state = { files: [], chartText: '', chartName: '', analysis: null };
+const state = { files: [], chartText: '', chartName: '', analysis: null, lang: initialLang() };
+const T = (key, params) => t(state.lang, key, params);
 
 if (trackingEnabled) $('#analyticsNote').hidden = false;
 const waitlistUrl = (CONFIG.waitlistUrl || '').trim();
@@ -36,7 +38,7 @@ async function addFiles(list) {
       track(`format/${loaded.format}`);
       track(`rows/${rowBucket(loaded.rows.length)}`);
     } catch (e) {
-      alert(`${f.name} 读取失败：${e.message}`);
+      alert(T('app.readFailed', { name: f.name, error: e.message }));
     }
   }
   refresh();
@@ -59,28 +61,29 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': 
 function renderFiles() {
   $('#filesPanel').hidden = !state.files.length;
   $('#files').innerHTML = state.files.map((f, i) => {
-    const opts = sel => ['<option value="">（不使用）</option>', ...f.headers.map(h =>
+    const opts = sel => [`<option value="">${esc(T('file.unused'))}</option>`, ...f.headers.map(h =>
       `<option value="${esc(h)}"${h === sel ? ' selected' : ''}>${esc(h)}</option>`)].join('');
-    const roles = Object.entries(ROLES)
-      .filter(([role]) => f.kind === 'orders' || !['financialStatus', 'refundedAmount', 'price'].includes(role))
-      .map(([role, label]) => `<label>${esc(label)}<select data-file="${i}" data-role="${role}">${opts(f.mapping[role])}</select></label>`)
+    const roles = ROLES
+      .filter(role => f.kind === 'orders' || !['financialStatus', 'refundedAmount', 'price'].includes(role))
+      .map(role => `<label>${esc(T(`role.${role}`))}<select data-file="${i}" data-role="${role}">${opts(f.mapping[role])}</select></label>`)
       .join('');
     const missing = !(f.mapping.product || f.mapping.lineName || f.mapping.sku);
     return `
       <div class="file">
         <div class="row">
           <span class="name">${esc(f.name)}</span>
-          <span class="tag">${esc(f.formatLabel)}</span>
+          <span class="tag">${esc(T(`format.${f.format}`))}</span>
           <select data-file="${i}" data-kind>
-            <option value="orders"${f.kind === 'orders' ? ' selected' : ''}>当作订单（销量）</option>
-            <option value="returns"${f.kind === 'returns' ? ' selected' : ''}>当作退货记录</option>
+            <option value="orders"${f.kind === 'orders' ? ' selected' : ''}>${esc(T('file.asOrders'))}</option>
+            <option value="returns"${f.kind === 'returns' ? ' selected' : ''}>${esc(T('file.asReturns'))}</option>
           </select>
-          <button type="button" class="link" data-remove="${i}" aria-label="移除">移除</button>
+          <button type="button" class="link" data-remove="${i}" >${esc(T('file.remove'))}</button>
         </div>
-        <div class="fmt">${f.rows.length} 行 · 已丢弃 ${f.droppedColumns.length} 个个人信息列${f.droppedColumns.length ? `（${esc(f.droppedColumns.join('、'))}）` : ''}</div>
-        ${missing ? '<div class="err">没有找到商品名或 SKU 列，请在下面手动指定。</div>' : ''}
+        <div class="fmt">${esc(T('file.meta', { rows: f.rows.length, dropped: f.droppedColumns.length }))}${f.droppedColumns.length
+          ? esc(T('file.metaColumns', { columns: f.droppedColumns.join(T('file.listSep')) })) : ''}</div>
+        ${missing ? `<div class="err">${esc(T('file.missing'))}</div>` : ''}
         <details${f.format === 'generic' || missing ? ' open' : ''}>
-          <summary>列映射${f.format === 'generic' ? '（未识别格式，已按列名猜测，请检查）' : ''}</summary>
+          <summary>${esc(T('file.mapping'))}${f.format === 'generic' ? esc(T('file.mappingGuessed')) : ''}</summary>
           <div class="map">${roles}</div>
         </details>
       </div>`;
@@ -94,12 +97,27 @@ function renderOutput() {
   $('#waitlist').hidden = !(ready && waitlistOn);
   if (!ready) { $('#report').innerHTML = ''; state.analysis = null; return; }
   state.analysis = analyze(state.files, { chartText: state.chartText });
-  $('#report').innerHTML = renderReport(state.analysis);
+  $('#report').innerHTML = renderReport(state.analysis, { lang: state.lang });
 }
 
 function refresh() {
   renderFiles();
   renderOutput();
+}
+
+function renderChartInfo() {
+  $('#chartInfo').textContent = state.chartName ? T('app.chartLoaded', { name: state.chartName }) : '';
+}
+
+/** Apply the current language to static page text, then re-render dynamic parts. */
+function applyLang() {
+  document.documentElement.lang = state.lang === 'zh' ? 'zh-CN' : 'en';
+  document.title = T('doc.title');
+  for (const el of document.querySelectorAll('[data-i18n]')) el.textContent = T(el.dataset.i18n);
+  for (const el of document.querySelectorAll('[data-i18n-label]')) el.setAttribute('aria-label', T(el.dataset.i18nLabel));
+  for (const b of document.querySelectorAll('[data-lang]')) b.setAttribute('aria-pressed', String(b.dataset.lang === state.lang));
+  renderChartInfo();
+  refresh();
 }
 
 // ---- events
@@ -115,21 +133,27 @@ drop.addEventListener('drop', e => {
 });
 
 document.addEventListener('click', async e => {
-  const t = e.target.closest('button');
-  if (!t) return;
-  if (t.dataset.sample) await loadSample(t.dataset.sample.split(','));
-  else if (t.dataset.sampleChart) {
-    state.chartText = await (await fetch(`fixtures/${t.dataset.sampleChart}`)).text();
-    state.chartName = t.dataset.sampleChart;
-    $('#chartInfo').textContent = `已载入 ${state.chartName}`;
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  if (btn.dataset.lang) {
+    if (btn.dataset.lang !== state.lang) {
+      state.lang = btn.dataset.lang;
+      saveLang(state.lang);
+      applyLang();
+    }
+  } else if (btn.dataset.sample) await loadSample(btn.dataset.sample.split(','));
+  else if (btn.dataset.sampleChart) {
+    state.chartText = await (await fetch(`fixtures/${btn.dataset.sampleChart}`)).text();
+    state.chartName = btn.dataset.sampleChart;
+    renderChartInfo();
     renderOutput();
-  } else if (t.dataset.remove) {
-    state.files.splice(Number(t.dataset.remove), 1);
+  } else if (btn.dataset.remove) {
+    state.files.splice(Number(btn.dataset.remove), 1);
     refresh();
-  } else if (t.dataset.copy) {
-    await navigator.clipboard?.writeText(t.dataset.copy);
-    t.textContent = '已复制';
-    setTimeout(() => { t.textContent = '复制'; }, 1500);
+  } else if (btn.dataset.copy) {
+    await navigator.clipboard?.writeText(btn.dataset.copy);
+    btn.textContent = T('report.copied');
+    setTimeout(() => { btn.textContent = T('report.copy'); }, 1500);
   }
 });
 
@@ -153,14 +177,14 @@ $('#chartInput').addEventListener('change', async e => {
   if (!f) return;
   state.chartText = await readText(f);
   state.chartName = f.name;
-  $('#chartInfo').textContent = `已载入 ${f.name}`;
+  renderChartInfo();
   e.target.value = '';
   renderOutput();
 });
 
 $('#dlHtml').addEventListener('click', () => {
   if (!state.analysis) return;
-  const blob = new Blob([renderReportDocument(state.analysis)], { type: 'text/html;charset=utf-8' });
+  const blob = new Blob([renderReportDocument(state.analysis, { lang: state.lang })], { type: 'text/html;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = `sizefit-report-${new Date().toISOString().slice(0, 10)}.html`;
@@ -177,3 +201,5 @@ $('#waitlistBtn').addEventListener('click', () => {
   track('waitlist');
   window.open(waitlistUrl, '_blank', 'noopener');
 });
+
+applyLang();

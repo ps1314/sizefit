@@ -6,23 +6,9 @@
 
 import { parseCSV } from './csv.js';
 
-export const ROLES = {
-  product: '商品名',
-  variant: '变体名（含尺码）',
-  lineName: '订单行名称（商品 - 变体）',
-  sku: 'SKU',
-  qty: '数量',
-  reason: '退货原因',
-  subReason: '退货子原因',
-  note: '顾客备注（只用于判断，不展示）',
-  staffNote: '客服备注（只用于判断，不展示）',
-  exchange: '换货目标（变体/SKU/备注）',
-  outcome: '处理结果（退款/换货）',
-  orderId: '订单号',
-  financialStatus: '付款状态',
-  refundedAmount: '退款金额',
-  price: '单价',
-};
+// Column roles. Labels live in the i18n dictionary ("role.<name>").
+export const ROLES = ['product', 'variant', 'lineName', 'sku', 'qty', 'reason', 'subReason', 'note', 'staffNote',
+  'exchange', 'outcome', 'orderId', 'financialStatus', 'refundedAmount', 'price'];
 
 export const norm = h => String(h).toLowerCase().replace(/[^a-z0-9一-鿿]/g, '');
 
@@ -44,12 +30,11 @@ export function isPiiHeader(header) {
 }
 
 /**
- * Known formats. `signature` headers identify the format; `map` lists candidate headers per role
+ * Known formats (display names: i18n "format.<id>"). `signature` headers identify the format; `map` lists candidate headers per role
  * (first match wins). Sources for the header names are listed in README.md.
  */
 export const FORMATS = {
   shopify_orders: {
-    label: 'Shopify 订单导出（Orders → Export）',
     kind: 'orders',
     signature: ['lineitemname', 'lineitemquantity', 'financialstatus', 'refundedamount'],
     map: {
@@ -63,7 +48,6 @@ export const FORMATS = {
     },
   },
   shopify_returns: {
-    label: 'Shopify 分析报表 · Returns（ShopifyQL FROM returns）',
     kind: 'returns',
     signature: ['returnlineitemreason', 'productvarianttitleattimeofsale', 'producttitleattimeofsale', 'returnedquantity'],
     map: {
@@ -77,7 +61,6 @@ export const FORMATS = {
     },
   },
   aftership: {
-    label: 'AfterShip Returns 导出',
     kind: 'returns',
     signature: ['rmanumber', 'returnproductsku', 'returnproducttitle', 'skureturnquantity', 'subreason', 'rmaoutcome'],
     map: {
@@ -93,7 +76,6 @@ export const FORMATS = {
     },
   },
   loop: {
-    label: 'Loop Returns（API / 数据连接器字段）',
     kind: 'returns',
     signature: ['parentreturnreason', 'exchangevariant', 'returnreason', 'returncomment', 'outcome'],
     map: {
@@ -204,7 +186,6 @@ export function loadFile(name, text) {
   return {
     name,
     format,
-    formatLabel: FORMATS[format]?.label || '未识别格式（已按列名猜测，请检查映射）',
     kind: guessKind(format, mapping),
     headers: kept,
     droppedColumns: dropped,

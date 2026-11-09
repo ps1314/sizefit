@@ -1,7 +1,8 @@
 // Renders an analysis result as HTML. Pure string output, so the same code runs in the
 // browser and in Node (tests / CLI). Free-text customer notes are never rendered.
 
-import { VERDICT, RULES } from './analyze.js';
+import { RULES } from './analyze.js';
+import { t } from './i18n.js';
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const pct = x => (x == null ? '—' : `${(x * 100).toFixed(1)}%`);
@@ -29,9 +30,10 @@ export const REPORT_CSS = `
 .sf-report th{font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap}
 .sf-report td.n,.sf-report th.n{text-align:right}
 .sf-report .scroll{overflow-x:auto}
-.sf-report .product table{min-width:820px}
+.sf-report .product table{min-width:880px}
 .sf-report table.rank{min-width:520px}
 .sf-report td.why{min-width:200px}
+.sf-report td.ev{white-space:nowrap}
 .sf-report .badge{display:inline-block;border-radius:999px;padding:1px 9px;font-size:12px;font-weight:600;white-space:nowrap}
 .sf-report .v-small{color:var(--small);background:var(--small-bg)}
 .sf-report .v-large{color:var(--large);background:var(--large-bg)}
@@ -42,6 +44,7 @@ export const REPORT_CSS = `
 .sf-report .phead{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;margin-bottom:10px}
 .sf-report .fitnote{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--soft);border-radius:8px;padding:10px 12px;margin:12px 0 6px}
 .sf-report .fitnote q{font-weight:600;quotes:"“" "”"}
+.sf-report .fitnote .meaning{flex-basis:100%;font-size:12px;color:var(--muted)}
 .sf-report .fitnote button{font:inherit;font-size:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;padding:2px 10px;cursor:pointer}
 .sf-report ul.sugg{margin:6px 0 0;padding-left:20px}
 .sf-report .why{font-size:12px;color:var(--muted)}
@@ -52,138 +55,173 @@ export const REPORT_CSS = `
 @media (max-width:640px){.sf-report .kpi b{font-size:18px}.sf-report th,.sf-report td{padding:6px 5px}}
 `;
 
-const badge = v => `<span class="badge v-${v}">${VERDICT[v]}</span>`;
-
-function evidenceCell(e) {
-  const total = e.exchange + e.reason;
-  if (!total) return '<span class="muted">0</span>';
-  const parts = [];
-  if (e.exchange) parts.push(`换货 ${e.exchange}`);
-  if (e.reason) parts.push(`原因 ${e.reason}`);
-  return `<b>${total}</b> <span class="why">${parts.join(' · ')}</span>`;
+/** Render the language-neutral pieces of an analysis result. */
+export function whyText(lang, why) {
+  const p = { ...why.p };
+  if (p.word) p.word = t(lang, `word.${p.word}`);
+  return t(lang, `why.${why.key}`, p);
 }
 
-function summaryBadges(p) {
-  const groups = {};
-  for (const c of p.sizes) {
-    if (c.verdict === 'normal' || c.verdict === 'insufficient') continue;
-    (groups[c.verdict] ||= []).push(c.size.size);
-  }
-  const out = Object.entries(groups).map(([v, list]) => `${esc(list.join('/'))} ${badge(v)}`);
-  if (!out.length) {
-    const allInsufficient = p.sizes.every(c => c.verdict === 'insufficient');
-    return allInsufficient ? badge('insufficient') : badge('normal');
-  }
-  return out.join(' ');
+export function suggestionText(lang, s) {
+  if (!s.fromChart) return t(lang, s.up ? 'sugg.noChartUp' : 'sugg.noChartDown', { size: s.size });
+  if (!s.parts.length) return t(lang, s.up ? 'sugg.halfUp' : 'sugg.halfDown', { size: s.size });
+  const parts = s.parts.map(x => t(lang, 'sugg.part', { ...x, sign: s.up ? '+' : '−' })).join(t(lang, 'sugg.partSep'));
+  return t(lang, 'sugg.chart', { size: s.size, parts });
 }
 
-function productSection(p, i, sales) {
-  const rows = p.sizes.map(c => `
+/** Explanation of the (always English) fit note in the UI language; empty when the UI is English. */
+export function fitNoteMeaning(lang, note) {
+  return note ? t(lang, `fitMeaning.${note.kind}`, note.p) : '';
+}
+
+/** Report body (inside a .sf-report wrapper). */
+export function renderReport(a, { lang = 'en', generatedAt = new Date() } = {}) {
+  const T = (k, p) => t(lang, k, p);
+  const badge = v => `<span class="badge v-${v}">${esc(T(`verdict.${v}`))}</span>`;
+  const productName = p => esc(p.product || T('report.unnamedProduct'));
+
+  const evidenceCell = e => {
+    const total = e.exchange + e.reason;
+    if (!total) return '<span class="muted">0</span>';
+    const parts = [];
+    if (e.exchange) parts.push(esc(T('report.evExchange', { n: e.exchange })));
+    if (e.reason) parts.push(esc(T('report.evReason', { n: e.reason })));
+    return `<b>${total}</b> <span class="why">${parts.join(' · ')}</span>`;
+  };
+
+  const summaryBadges = p => {
+    const groups = {};
+    for (const c of p.sizes) {
+      if (c.verdict === 'normal' || c.verdict === 'insufficient') continue;
+      (groups[c.verdict] ||= []).push(c.size.size);
+    }
+    const out = Object.entries(groups).map(([v, list]) => `${esc(list.join('/'))} ${badge(v)}`);
+    if (out.length) return out.join(' ');
+    return p.sizes.every(c => c.verdict === 'insufficient') ? badge('insufficient') : badge('normal');
+  };
+
+  const productSection = (p, i) => {
+    const sales = a.hasSales;
+    const rows = p.sizes.map(c => `
       <tr>
         <td><b>${esc(c.size.size)}</b></td>
         ${sales ? `<td class="n">${c.sold}</td>` : ''}
         <td class="n">${c.returns}</td>
-        <td>${evidenceCell(c.small)}</td>
-        <td>${evidenceCell(c.large)}</td>
+        <td class="ev">${evidenceCell(c.small)}</td>
+        <td class="ev">${evidenceCell(c.large)}</td>
         <td class="n">${c.fit || '<span class="muted">0</span>'}</td>
         <td class="n">${c.other}/${c.unknown}</td>
         <td>${badge(c.verdict)}</td>
         <td class="n">${c.evidence}</td>
-        <td class="why">${esc(c.why)}</td>
+        <td class="why">${esc(whyText(lang, c.why))}</td>
       </tr>`).join('');
-  const note = p.fitNote
-    ? `<div class="fitnote"><span class="muted">商品页 fit note：</span><q>${esc(p.fitNote)}</q><button type="button" data-copy="${esc(p.fitNote)}">复制</button></div>`
-    : `<div class="fitnote muted">${p.sizes.some(c => c.verdict === 'unconfirmed')
-      ? '有尺码需要先确认（看下面「待确认」的说明），暂不建议写 fit note。'
-      : '数据不足，暂不建议写 fit note。'}</div>`;
-  const sugg = p.suggestions.length
-    ? `<div><b>尺码表修改建议</b>${p.hasChart ? '' : ' <span class="muted">（未上传该款尺码表，只给方向）</span>'}
-        <ul class="sugg">${p.suggestions.map(s => `<li>${esc(s.text)}</li>`).join('')}</ul></div>`
-    : '';
-  return `
+    let note;
+    if (p.fitNote) {
+      const meaning = fitNoteMeaning(lang, p.fitNote);
+      note = `<div class="fitnote"><span class="muted">${esc(T('report.fitNoteLabel'))}</span><q lang="en">${esc(p.fitNote.text)}</q>`
+        + `<button type="button" data-copy="${esc(p.fitNote.text)}" data-copied="${esc(T('report.copied'))}">${esc(T('report.copy'))}</button>`
+        + (meaning ? `<span class="meaning">${esc(T('report.fitNoteMeaning', { meaning }))}</span>` : '')
+        + '</div>';
+    } else {
+      const review = p.sizes.some(c => c.verdict === 'unconfirmed');
+      note = `<div class="fitnote muted">${esc(T(review ? 'report.fitNoteNoneReview' : 'report.fitNoteNoneData'))}</div>`;
+    }
+    const sugg = p.suggestions.length
+      ? `<div><b>${esc(T('report.suggTitle'))}</b>${p.hasChart ? '' : ` <span class="muted">${esc(T('report.suggNoChart'))}</span>`}
+        <ul class="sugg">${p.suggestions.map(s => `<li>${esc(suggestionText(lang, s))}</li>`).join('')}</ul></div>`
+      : '';
+    const meta = [T('report.productReturns', { n: p.returns })];
+    if (p.sold) meta.push(T('report.productSales', { sold: p.sold, rate: pct(p.returnRate) }));
+    meta.push(T('report.productSizeIssue', { n: p.sizeIssueUnits }));
+    return `
   <section class="product" id="p${i}">
-    <div class="phead"><h3>${i + 1}. ${esc(p.product)}</h3>
-      <span class="muted">退货 ${p.returns} 件${p.sold ? ` · 售出 ${p.sold} 件 · 退货率 ${pct(p.returnRate)}` : ''} · 尺码相关 ${p.sizeIssueUnits} 件</span>
+    <div class="phead"><h3>${i + 1}. ${productName(p)}</h3>
+      <span class="muted">${esc(meta.join(' · '))}</span>
     </div>
     <div class="scroll"><table>
-      <thead><tr><th>尺码</th>${sales ? '<th class="n">售出</th>' : ''}<th class="n">退货</th><th>偏小依据</th><th>偏大依据</th>
-        <th class="n">尺码不明</th><th class="n">其他/无原因</th><th>结论</th><th class="n">依据条数</th><th>说明</th></tr></thead>
+      <thead><tr><th>${esc(T('report.thSize'))}</th>${sales ? `<th class="n">${esc(T('report.thSold'))}</th>` : ''}
+        <th class="n">${esc(T('report.thReturns'))}</th><th>${esc(T('report.thSmallEv'))}</th><th>${esc(T('report.thLargeEv'))}</th>
+        <th class="n">${esc(T('report.thFit'))}</th><th class="n">${esc(T('report.thOtherUnknown'))}</th><th>${esc(T('report.thVerdict'))}</th>
+        <th class="n">${esc(T('report.thEvidence'))}</th><th>${esc(T('report.thWhy'))}</th></tr></thead>
       <tbody>${rows}</tbody>
     </table></div>
     ${note}
     ${sugg}
   </section>`;
-}
+  };
 
-/** Report body (inside a .sf-report wrapper). */
-export function renderReport(a, { generatedAt = new Date() } = {}) {
-  const t = a.totals;
+  const tot = a.totals;
   const flaggedSizes = a.products.reduce((n, p) => n + p.flagged, 0);
   const unconfirmedSizes = a.products.reduce((n, p) => n + p.unconfirmed, 0);
   const notes = [];
-  if (a.refundsInferred) {
-    notes.push('只上传了订单导出：退货是从退款状态推断的，没有退货原因，所以只能判断「待确认」，给不出偏大偏小。再上传一份退货工具导出（带原因或换货记录）效果会好很多。');
-  }
-  if (!a.hasSales) notes.push('没有上传订单导出，缺少销量，无法计算退货率；结论只基于退货记录本身。');
-  if (a.skipped.noSize) notes.push(`${a.skipped.noSize} 件退货/销售没有识别出尺码，已跳过（可在列映射里指定变体或 SKU 列）。`);
-  if (a.skipped.ambiguousRefund) notes.push(`${a.skipped.ambiguousRefund} 个部分退款订单无法确定退的是哪一行，已跳过。`);
+  if (a.refundsInferred) notes.push(T('report.noteRefunds'));
+  if (!a.hasSales) notes.push(T('report.noteNoSales'));
+  if (a.skipped.noSize) notes.push(T('report.noteNoSize', { n: a.skipped.noSize }));
+  if (a.skipped.ambiguousRefund) notes.push(T('report.noteAmbiguous', { n: a.skipped.ambiguousRefund }));
 
   const ranked = a.products.filter(p => p.flagged || p.unconfirmed || p.sizeIssueUnits);
   const rankRows = ranked.map((p, i) => `
       <tr>
         <td>${i + 1}</td>
-        <td><a href="#p${a.products.indexOf(p)}">${esc(p.product)}</a></td>
+        <td><a href="#p${a.products.indexOf(p)}">${productName(p)}</a></td>
         <td>${summaryBadges(p)}</td>
         <td class="n">${p.sizeIssueUnits}</td>
         <td class="n">${p.returns}</td>
         ${a.hasSales ? `<td class="n">${pct(p.returnRate)}</td>` : ''}
       </tr>`).join('');
 
+  const files = a.files.map(f => T('report.fileMeta', {
+    name: f.name, format: T(`format.${f.format}`), rows: f.rows, dropped: f.droppedColumns,
+  })).join(T('report.fileSep'));
+  const R = RULES;
+
   return `
-<div class="sf-report">
-  <h1>尺码偏差报告</h1>
-  <div class="meta">生成于 ${esc(generatedAt.toISOString().slice(0, 16).replace('T', ' '))} UTC ·
-    数据：${a.files.map(f => `${esc(f.name)}（${esc(f.format)}，${f.rows} 行，已丢弃 ${f.droppedColumns} 个个人信息列）`).join('；')}
-    ${a.chartRows ? ` · 尺码表 ${a.chartRows} 行` : ''}</div>
+<div class="sf-report" lang="${lang === 'zh' ? 'zh-CN' : 'en'}">
+  <h1>${esc(T('report.title'))}</h1>
+  <div class="meta">${esc(T('report.generated', { time: generatedAt.toISOString().slice(0, 16).replace('T', ' ') }))} ·
+    ${esc(T('report.data'))}${esc(files)}${a.chartRows ? ` · ${esc(T('report.chartRows', { n: a.chartRows }))}` : ''}</div>
   ${notes.map(n => `<div class="note">${esc(n)}</div>`).join('')}
   <div class="kpis">
-    <div class="kpi"><b>${t.returns}</b><span>退货件数</span></div>
-    ${a.hasSales ? `<div class="kpi"><b>${t.sold}</b><span>售出件数</span></div>` : ''}
-    <div class="kpi"><b>${t.small} / ${t.large}</b><span>说偏小 / 偏大（其中换货 ${t.exchange}）</span></div>
-    <div class="kpi"><b>${t.fit}</b><span>尺码不合适但方向不明</span></div>
-    <div class="kpi"><b>${t.returns ? pct((t.small + t.large) / t.returns) : '—'}</b><span>退货能归到具体偏大/偏小</span></div>
-    <div class="kpi"><b>${flaggedSizes} / ${unconfirmedSizes}</b><span>判定偏差 / 待确认的尺码</span></div>
+    <div class="kpi"><b>${tot.returns}</b><span>${esc(T('report.kpiReturns'))}</span></div>
+    ${a.hasSales ? `<div class="kpi"><b>${tot.sold}</b><span>${esc(T('report.kpiSold'))}</span></div>` : ''}
+    <div class="kpi"><b>${tot.small} / ${tot.large}</b><span>${esc(T('report.kpiDirection', { n: tot.exchange }))}</span></div>
+    <div class="kpi"><b>${tot.fit}</b><span>${esc(T('report.kpiFit'))}</span></div>
+    <div class="kpi"><b>${tot.returns ? pct((tot.small + tot.large) / tot.returns) : '—'}</b><span>${esc(T('report.kpiAttributed'))}</span></div>
+    <div class="kpi"><b>${flaggedSizes} / ${unconfirmedSizes}</b><span>${esc(T('report.kpiFlagged'))}</span></div>
   </div>
 
-  <h2>问题款排行</h2>
+  <h2>${esc(T('report.rankTitle'))}</h2>
   ${ranked.length ? `<div class="scroll"><table class="rank">
-    <thead><tr><th>#</th><th>商品</th><th>结论</th><th class="n">尺码相关退货</th><th class="n">退货</th>${a.hasSales ? '<th class="n">退货率</th>' : ''}</tr></thead>
-    <tbody>${rankRows}</tbody></table></div>` : '<p class="muted">没有发现尺码问题。</p>'}
+    <thead><tr><th>#</th><th>${esc(T('report.thProduct'))}</th><th>${esc(T('report.thVerdict'))}</th>
+      <th class="n">${esc(T('report.thSizeIssue'))}</th><th class="n">${esc(T('report.thReturns'))}</th>
+      ${a.hasSales ? `<th class="n">${esc(T('report.thRate'))}</th>` : ''}</tr></thead>
+    <tbody>${rankRows}</tbody></table></div>` : `<p class="muted">${esc(T('report.rankNone'))}</p>`}
 
-  <h2>每款每个尺码</h2>
-  ${a.products.map((p, i) => productSection(p, i, a.hasSales)).join('')}
+  <h2>${esc(T('report.sizesTitle'))}</h2>
+  ${a.products.map(productSection).join('')}
 
   <footer>
-    <b>判断规则</b>
+    <b>${esc(T('report.rulesTitle'))}</b>
     <ul>
-      <li>信号从强到弱：换货方向（S 换 M = 偏小）＞ 退货原因文字（too small / 偏小 等）＞ 只有退货率高。</li>
-      <li>某尺码至少有 ${RULES.MIN_DIRECTIONAL} 件说明了偏大或偏小，且多数方向的比例在约 90% 置信下仍超过一半，才判「偏小 / 偏大」。</li>
-      <li>只有退货率高（≥ 该款平均 ${RULES.HIGH_RATE_MULT} 倍且高出 ${RULES.HIGH_RATE_MIN_GAP * 100} 个百分点）、或有 ${RULES.FIT_UNCLEAR_MIN} 件以上「尺码不合适」但没说方向时，判「待确认」。</li>
-      <li>「正常」需要售出 ≥ ${RULES.MIN_SOLD_FOR_NORMAL} 件且尺码反馈 &lt; ${RULES.MAX_DIR_RATE_NORMAL * 100}%；没有销量时需要 ≥ ${RULES.MIN_RETURNS_NORMAL_NO_SALES} 件有原因的退货且尺码相关 &lt; ${RULES.MAX_SIZE_SHARE_NORMAL_NO_SALES * 100}%。其余为「样本不足」。</li>
-      <li>报告只含商品名、尺码和计数。买家姓名、邮箱、地址、电话等列在读取时已丢弃，顾客备注只用于分类，不出现在报告里。</li>
+      <li>${esc(T('report.ruleSignals'))}</li>
+      <li>${esc(T('report.ruleDirection', { min: R.MIN_DIRECTIONAL }))}</li>
+      <li>${esc(T('report.ruleReview', { mult: R.HIGH_RATE_MULT, gap: R.HIGH_RATE_MIN_GAP * 100, fit: R.FIT_UNCLEAR_MIN }))}</li>
+      <li>${esc(T('report.ruleNormal', { sold: R.MIN_SOLD_FOR_NORMAL, rate: R.MAX_DIR_RATE_NORMAL * 100, returns: R.MIN_RETURNS_NORMAL_NO_SALES, share: R.MAX_SIZE_SHARE_NORMAL_NO_SALES * 100 }))}</li>
+      <li>${esc(T('report.rulePrivacy'))}</li>
     </ul>
   </footer>
 </div>`;
 }
 
-/** Standalone HTML document for "download HTML". */
-export function renderReportDocument(a, opts) {
+/** Standalone HTML document for "download HTML", in the given language. */
+export function renderReportDocument(a, opts = {}) {
+  const lang = opts.lang || 'en';
   return `<!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>尺码偏差报告</title>
+<html lang="${lang === 'zh' ? 'zh-CN' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${esc(t(lang, 'report.title'))}</title>
 <style>body{margin:0;padding:24px 16px;background:#fff}@media (prefers-color-scheme: dark){body{background:#0f1217}}
 .wrap{max-width:1080px;margin:0 auto}${REPORT_CSS}</style></head>
 <body><div class="wrap">${renderReport(a, opts)}</div>
-<script>document.addEventListener('click',e=>{const b=e.target.closest('[data-copy]');if(!b)return;navigator.clipboard&&navigator.clipboard.writeText(b.dataset.copy).then(()=>{b.textContent='已复制'})})</script>
+<script>document.addEventListener('click',e=>{const b=e.target.closest('[data-copy]');if(!b)return;navigator.clipboard&&navigator.clipboard.writeText(b.dataset.copy).then(()=>{b.textContent=b.dataset.copied})})</script>
 </body></html>`;
 }

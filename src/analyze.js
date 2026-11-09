@@ -20,13 +20,7 @@ export const RULES = {
   HIGH_RATE_MIN_GAP: 0.05,   // and at least 5 percentage points above it
 };
 
-export const VERDICT = {
-  small: '偏小',
-  large: '偏大',
-  normal: '正常',
-  unconfirmed: '待确认',
-  insufficient: '样本不足',
-};
+export const VERDICTS = ['small', 'large', 'normal', 'unconfirmed', 'insufficient'];
 
 const num = v => {
   const n = parseFloat(String(v ?? '').replace(/[^0-9.\-]/g, ''));
@@ -52,7 +46,7 @@ function lineIdentity(row, m) {
   if (!product && sku) {
     product = sku.replace(/[-_\s]+[^-_\s]+$/, ''); // drop the trailing size segment
   }
-  return { product: product || '(未命名商品)', variant, sku, size };
+  return { product, variant, sku, size }; // empty product name is rendered as "unnamed" by the report
 }
 
 function exchangeSize(value, header) {
@@ -142,7 +136,10 @@ function emptyCell(size) {
   };
 }
 
-/** Decide 偏小 / 偏大 / 正常 / 待确认 / 样本不足 for one size cell. */
+/**
+ * Decide small / large / normal / unconfirmed / insufficient for one size cell.
+ * `why` is language-neutral: { key, p } is rendered through the i18n dictionary ("why.<key>").
+ */
 export function judgeCell(cell, ctx = {}) {
   const R = RULES;
   const s = cell.small.exchange + cell.small.reason;
@@ -150,56 +147,54 @@ export function judgeCell(cell, ctx = {}) {
   const dir = s + l;
   const hasSales = !!ctx.hasSales;
   const sold = cell.sold;
-  const lean = s > l ? '偏小' : l > s ? '偏大' : '';
+  const lean = s > l ? 'small' : l > s ? 'large' : null;
+  const why = (key, p = {}) => ({ key, p });
 
   if (dir >= R.MIN_DIRECTIONAL) {
     if (hasSales && sold > 0 && dir / sold < R.MIN_DIR_SHARE_OF_SALES) {
-      return { verdict: 'normal', why: `尺码反馈 ${dir} 件，不到销量 ${sold} 件的 ${R.MIN_DIR_SHARE_OF_SALES * 100}%` };
+      return { verdict: 'normal', why: why('noise', { dir, sold, pct: R.MIN_DIR_SHARE_OF_SALES * 100 }) };
     }
     const dom = Math.max(s, l);
     if (wilsonLower(dom, dir) > 0.5) {
-      return {
-        verdict: s > l ? 'small' : 'large',
-        why: `${dir} 件有方向的尺码反馈中 ${dom} 件说${s > l ? '偏小' : '偏大'}`,
-      };
+      return { verdict: lean, why: why('direction', { dir, dom, word: lean }) };
     }
-    return { verdict: 'unconfirmed', why: `偏小 ${s} 件、偏大 ${l} 件，方向不一致` };
+    return { verdict: 'unconfirmed', why: why('mixed', { small: s, large: l }) };
   }
 
   if (cell.fit >= R.FIT_UNCLEAR_MIN) {
-    return { verdict: 'unconfirmed', why: `${cell.fit} 件退货说尺码不合适，但没说偏大还是偏小` };
+    return { verdict: 'unconfirmed', why: why('fitUnclear', { n: cell.fit }) };
   }
 
   if (hasSales && sold >= R.HIGH_RATE_MIN_SOLD && cell.returns >= R.HIGH_RATE_MIN_RETURNS && ctx.baselineRate != null) {
     const rate = cell.returns / sold;
     if (rate >= ctx.baselineRate * R.HIGH_RATE_MULT && rate - ctx.baselineRate >= R.HIGH_RATE_MIN_GAP) {
-      return {
-        verdict: 'unconfirmed',
-        why: `退货率 ${pct(rate)}，高于该款平均 ${pct(ctx.baselineRate)}，但缺少说明方向的原因`,
-      };
+      return { verdict: 'unconfirmed', why: why('highRate', { rate: pct(rate), base: pct(ctx.baselineRate) }) };
     }
   }
   if (!hasSales && cell.returns >= R.HIGH_RATE_MIN_RETURNS && ctx.avgReturnsPerSize
       && cell.returns >= ctx.avgReturnsPerSize * R.HIGH_RATE_MULT
       && (cell.unknown + cell.fit) / cell.returns >= 0.5) {
-    return { verdict: 'unconfirmed', why: `退货 ${cell.returns} 件，明显多于该款其他尺码，且多数没有原因` };
+    return { verdict: 'unconfirmed', why: why('highReturnsNoSales', { n: cell.returns }) };
   }
 
   const known = cell.returns - cell.unknown;
   if (hasSales && sold >= R.MIN_SOLD_FOR_NORMAL && dir / sold < R.MAX_DIR_RATE_NORMAL) {
-    const why = cell.returns && known / cell.returns < 0.5
-      ? `售出 ${sold} 件，退货率 ${pct(cell.returns / sold)} 不高于该款平均（多数退货没有原因）`
-      : `售出 ${sold} 件，尺码反馈 ${dir} 件`;
-    return { verdict: 'normal', why };
+    return {
+      verdict: 'normal',
+      why: cell.returns && known / cell.returns < 0.5
+        ? why('normalSalesNoReasons', { sold, rate: pct(cell.returns / sold) })
+        : why('normalSales', { sold, dir }),
+    };
   }
   if (!hasSales && known >= R.MIN_RETURNS_NORMAL_NO_SALES
       && (dir + cell.fit) / known < R.MAX_SIZE_SHARE_NORMAL_NO_SALES) {
-    return { verdict: 'normal', why: `${known} 件有原因的退货中尺码相关仅 ${dir + cell.fit} 件` };
+    return { verdict: 'normal', why: why('normalNoSales', { known, n: dir + cell.fit }) };
   }
   const need = R.MIN_DIRECTIONAL - dir;
+  if (!dir) return { verdict: 'insufficient', why: why('insufficientNone') };
   return {
     verdict: 'insufficient',
-    why: dir ? `有方向的反馈 ${dir} 件${lean ? `（倾向${lean}）` : ''}，还差 ${need} 件` : '没有足够的尺码反馈',
+    why: lean ? why('insufficientLean', { dir, need, word: lean }) : why('insufficientSome', { dir, need }),
   };
 }
 
@@ -237,7 +232,11 @@ function chartFor(chart, product) {
 
 const roundHalf = x => Math.round(x * 2) / 2;
 
-/** Size-chart change suggestions for one product. */
+/**
+ * Size-chart change suggestions for one product. Language-neutral:
+ *   { size, up, fromChart, parts: [{ label, delta, unit, cur, next }] }
+ * fromChart=false → no chart row for this size (direction only); parts empty → chart had no usable step.
+ */
 export function chartSuggestions(product, sizes, chart) {
   const flagged = sizes.filter(c => c.verdict === 'small' || c.verdict === 'large');
   if (!flagged.length) return [];
@@ -245,9 +244,7 @@ export function chartSuggestions(product, sizes, chart) {
   return flagged.map(c => {
     const up = c.verdict === 'small';
     const idx = rows.findIndex(r => r.size === c.size.size);
-    if (idx === -1) {
-      return { size: c.size.size, text: `${c.size.size}：各围度建议${up ? '放大' : '缩小'}约半个码（没有尺码表数据，只给方向）` };
-    }
+    if (idx === -1) return { size: c.size.size, up, fromChart: false, parts: [] };
     const parts = [];
     for (const [measure, cur] of Object.entries(rows[idx].measures)) {
       const neighbour = up ? (rows[idx + 1] || rows[idx - 1]) : (rows[idx - 1] || rows[idx + 1]);
@@ -259,18 +256,16 @@ export function chartSuggestions(product, sizes, chart) {
       const unit = /\b(in|inch|inches)\b|"/i.test(measure) ? 'in' : 'cm';
       const label = measure.replace(/\s*[(（][^)）]*[)）]\s*/g, '').trim();
       const next = Math.round((cur + (up ? delta : -delta)) * 10) / 10;
-      parts.push(`${label} ${up ? '+' : '−'}${delta}${unit}（${cur} → ${next}）`);
+      parts.push({ label, delta, unit, cur, next });
     }
-    return {
-      size: c.size.size,
-      text: parts.length
-        ? `${c.size.size}：${parts.join('，')}`
-        : `${c.size.size}：各围度建议${up ? '放大' : '缩小'}约半个码`,
-    };
+    return { size: c.size.size, up, fromChart: true, parts };
   });
 }
 
-/** English fit note a merchant can paste on the product page, or null when there is nothing to say. */
+/**
+ * English fit note a merchant can paste on the product page, or null when there is nothing to say.
+ * Returns { text, kind, p }; kind + p let the UI explain the note in other languages ("fitMeaning.<kind>").
+ */
 export function fitNote(sizes) {
   const small = sizes.filter(c => c.verdict === 'small').map(c => c.size.size);
   const large = sizes.filter(c => c.verdict === 'large').map(c => c.size.size);
@@ -279,20 +274,23 @@ export function fitNote(sizes) {
   const list = a => (a.length === 1 ? `Size ${a[0]} runs` : `Sizes ${a.slice(0, -1).join(', ')} and ${a[a.length - 1]} run`);
   if (small.length && large.length) {
     const v = a => `${a.join('/')} ${a.length === 1 ? 'runs' : 'run'}`;
-    return `Fit varies by size: ${v(small)} small, ${v(large)} large — please check the size chart before ordering.`;
+    return {
+      text: `Fit varies by size: ${v(small)} small, ${v(large)} large — please check the size chart before ordering.`,
+      kind: 'mixed', p: { small: small.join('/'), large: large.join('/') },
+    };
   }
   if (small.length) {
     return small.length * 2 >= judged
-      ? 'Runs small — we recommend sizing up.'
-      : `${list(small)} small — if you're between sizes, we recommend sizing up.`;
+      ? { text: 'Runs small — we recommend sizing up.', kind: 'allSmall', p: {} }
+      : { text: `${list(small)} small — if you're between sizes, we recommend sizing up.`, kind: 'someSmall', p: { sizes: small.join('/') } };
   }
   if (large.length) {
     return large.length * 2 >= judged
-      ? 'Runs large — we recommend sizing down.'
-      : `${list(large)} large — if you're between sizes, we recommend sizing down.`;
+      ? { text: 'Runs large — we recommend sizing down.', kind: 'allLarge', p: {} }
+      : { text: `${list(large)} large — if you're between sizes, we recommend sizing down.`, kind: 'someLarge', p: { sizes: large.join('/') } };
   }
   const unconfirmed = sizes.some(c => c.verdict === 'unconfirmed');
-  if (normal.length >= 2 && !unconfirmed) return 'True to size — order your usual size.';
+  if (normal.length >= 2 && !unconfirmed) return { text: 'True to size — order your usual size.', kind: 'tts', p: {} };
   return null;
 }
 
@@ -376,6 +374,6 @@ export function analyze(files, { chartText = '' } = {}) {
     refundsInferred: hasSales && !hasReturnsFile,
     skipped,
     chartRows: chart.length,
-    files: files.map(f => ({ name: f.name, format: f.formatLabel, kind: f.kind, rows: f.rows.length, droppedColumns: f.droppedColumns.length })),
+    files: files.map(f => ({ name: f.name, format: f.format, kind: f.kind, rows: f.rows.length, droppedColumns: f.droppedColumns.length })),
   };
 }

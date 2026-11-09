@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { judgeCell, analyze, fitNote, chartSuggestions, RULES } from '../src/analyze.js';
 import { loadFile } from '../src/formats.js';
 import { sizeFromVariant } from '../src/sizes.js';
+import { suggestionText } from '../src/report.js';
 
 const cell = (o = {}) => ({
   size: sizeFromVariant(o.size || 'M'), sold: 0, returns: 0,
@@ -33,7 +34,8 @@ test('direction-less size complaints → 待确认', () => {
 test('high return rate without reasons → 待确认', () => {
   const j = judgeCell(cell({ sold: 100, returns: 25, unknown: 25 }), { hasSales: true, baselineRate: 0.1 });
   assert.equal(j.verdict, 'unconfirmed');
-  assert.match(j.why, /退货率/);
+  assert.equal(j.why.key, 'highRate');
+  assert.equal(j.why.p.base, '10%');
 });
 
 test('normal needs enough sales or enough reasoned returns', () => {
@@ -74,10 +76,12 @@ test('exchange beats the written reason when they disagree', () => {
 
 test('fit notes', () => {
   const sz = (size, verdict) => ({ size: { size }, verdict });
-  assert.equal(fitNote([sz('S', 'small'), sz('M', 'small'), sz('L', 'normal')]), 'Runs small — we recommend sizing up.');
-  assert.equal(fitNote([sz('S', 'normal'), sz('M', 'normal'), sz('XL', 'large')]), "Size XL runs large — if you're between sizes, we recommend sizing down.");
-  assert.match(fitNote([sz('S', 'small'), sz('XL', 'large')]), /^Fit varies by size: S runs small, XL runs large/);
-  assert.equal(fitNote([sz('S', 'normal'), sz('M', 'normal')]), 'True to size — order your usual size.');
+  assert.equal(fitNote([sz('S', 'small'), sz('M', 'small'), sz('L', 'normal')]).text, 'Runs small — we recommend sizing up.');
+  const some = fitNote([sz('S', 'normal'), sz('M', 'normal'), sz('XL', 'large')]);
+  assert.equal(some.text, "Size XL runs large — if you're between sizes, we recommend sizing down.");
+  assert.deepEqual([some.kind, some.p], ['someLarge', { sizes: 'XL' }]);
+  assert.match(fitNote([sz('S', 'small'), sz('XL', 'large')]).text, /^Fit varies by size: S runs small, XL runs large/);
+  assert.equal(fitNote([sz('S', 'normal'), sz('M', 'normal')]).text, 'True to size — order your usual size.');
   assert.equal(fitNote([sz('S', 'insufficient')]), null);
   assert.equal(fitNote([sz('S', 'normal'), sz('M', 'normal'), sz('L', 'unconfirmed')]), null);
 });
@@ -89,7 +93,11 @@ test('size chart suggestions use half the grading step', () => {
     { product: 'tee', size: sizeFromVariant('L'), measures: { 'Chest (cm)': 100 } },
   ];
   const [s] = chartSuggestions('Tee', [{ size: sizeFromVariant('M'), verdict: 'small' }], chart);
-  assert.equal(s.text, 'M：Chest +2cm（96 → 98）');
+  assert.deepEqual(s.parts, [{ label: 'Chest', delta: 2, unit: 'cm', cur: 96, next: 98 }]);
+  assert.equal(suggestionText('zh', s), 'M：Chest +2cm（96 → 98）');
+  assert.equal(suggestionText('en', s), 'M: Chest +2 cm (96 → 98)');
   const [n] = chartSuggestions('Other', [{ size: sizeFromVariant('M'), verdict: 'large' }], []);
-  assert.match(n.text, /缩小约半个码/);
+  assert.equal(n.fromChart, false);
+  assert.match(suggestionText('zh', n), /缩小约半个码/);
+  assert.match(suggestionText('en', n), /take in all measurements by about half a size/);
 });
