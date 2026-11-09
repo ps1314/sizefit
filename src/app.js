@@ -29,6 +29,8 @@ const readText = file => new Promise((resolve, reject) => {
 });
 
 async function addFiles(list) {
+  // Own data replaces any sample that was loaded earlier — mixing them would corrupt the report.
+  state.files = state.files.filter(f => !f.sample);
   let added = 0;
   for (const f of list) {
     try {
@@ -43,14 +45,17 @@ async function addFiles(list) {
     }
   }
   refresh();
-  if (added) track('report');
+  if (added) {
+    track('report');
+    $('#filesPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }
 
 async function loadSample(names) {
   state.files = [];
   for (const n of names) {
     const text = await (await fetch(`fixtures/${n}`)).text();
-    state.files.push(loadFile(n, text));
+    state.files.push({ ...loadFile(n, text), sample: true });
   }
   track(`sample/${names.map(n => n.replace(/\.csv$/, '')).join('+')}`);
   refresh();
