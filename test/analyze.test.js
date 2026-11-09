@@ -101,3 +101,102 @@ test('size chart suggestions use half the grading step', () => {
   assert.match(suggestionText('zh', n), /缩小约半个码/);
   assert.match(suggestionText('en', n), /take in all measurements by about half a size/);
 });
+
+import { estimateFixes, parseDate } from '../src/analyze.js';
+import { HERO_EXAMPLE } from '../src/hero.js';
+import { readFileSync } from 'node:fs';
+import { renderReportDocument } from '../src/report.js';
+
+test('parseDate handles Shopify, ISO, month-only and US formats', () => {
+  assert.equal(parseDate('2026-05-01 10:20:00 -0400'), Date.UTC(2026, 4, 1));
+  assert.equal(parseDate('2026-10-02T12:00:00Z'), Date.UTC(2026, 9, 2));
+  assert.equal(parseDate('2026-09'), Date.UTC(2026, 8, 1));
+  assert.equal(parseDate('9/14/2026'), Date.UTC(2026, 8, 14));
+  assert.ok(Number.isNaN(parseDate('')));
+  assert.ok(Number.isNaN(parseDate('Refund')));
+});
+
+const fixProducts = (price = 40) => [{
+  product: 'Tee', unitPrice: price,
+  sizes: [
+    { size: { size: 'S' }, verdict: 'small', evidence: 12, unitPrice: price },
+    { size: { size: 'M' }, verdict: 'unconfirmed', evidence: 20, unitPrice: price },
+    { size: { size: 'L' }, verdict: 'large', evidence: 6, unitPrice: null },
+    { size: { size: 'XL' }, verdict: 'normal', evidence: 30, unitPrice: price },
+    { size: { size: 'XS' }, verdict: 'insufficient', evidence: 3, unitPrice: price },
+  ],
+}];
+
+test('fixes: small/large first, then needs review; normal/insufficient never listed', () => {
+  const f = estimateFixes(fixProducts(), { days: 61 });
+  assert.deepEqual(f.items.map(i => i.size), ['S', 'L', 'M']);
+});
+
+test('fixes: monthly amount = units × unit price × 30.44 / days', () => {
+  const f = estimateFixes(fixProducts(), { days: 61 });
+  const s = f.items[0];
+  assert.equal(f.monthly, true);
+  assert.ok(Math.abs(s.unitsPerMonth - 12 * 30.44 / 61) < 1e-9);
+  assert.ok(Math.abs(s.amountPerMonth - 12 * 40 * 30.44 / 61) < 1e-9);
+  // L has no own price → falls back to the product's average price
+  assert.ok(Math.abs(f.items[1].amountPerMonth - 6 * 40 * 30.44 / 61) < 1e-9);
+  assert.ok(Math.abs(f.totalAmountPerMonth - 38 * 40 * 30.44 / 61) < 1e-9);
+});
+
+test('fixes without prices: monthly units, no amount', () => {
+  const f = estimateFixes(fixProducts(null), { days: 61 });
+  assert.equal(f.monthly, true);
+  assert.ok(f.items.every(i => i.amountPerMonth === null && i.unitsPerMonth > 0));
+  assert.equal(f.totalAmountPerMonth, null);
+});
+
+test('fixes without dates (or too short a span): totals only, no money', () => {
+  for (const period of [null, { days: 1 }, { days: 13 }]) {
+    const f = estimateFixes(fixProducts(), period);
+    assert.equal(f.monthly, false);
+    assert.ok(f.items.every(i => i.amountPerMonth === null && i.unitsPerMonth === null));
+    assert.equal(f.totalUnits, 38);
+    assert.equal(f.totalAmountPerMonth, null);
+  }
+});
+
+const fx = n => readFileSync(new URL(`../fixtures/${n}`, import.meta.url), 'utf8');
+
+test('report shows money only when price and dates exist', () => {
+  const withBoth = analyze(['shopify_orders_export.csv', 'loop_returns.csv'].map(n => loadFile(n, fx(n))));
+  assert.equal(withBoth.currency, 'USD');
+  assert.ok(withBoth.period.days > 100);
+  const zh = renderReportDocument(withBoth, { lang: 'zh' });
+  const en = renderReportDocument(withBoth, { lang: 'en' });
+  assert.match(zh, /先改这几个/);
+  assert.match(zh, /≈ US\$\d[\d,]*\/月/);
+  assert.match(en, /Fix these first/);
+  assert.match(en, /≈ \$\d[\d,]*\/mo/);
+  assert.match(en, /an estimate/);
+
+  // AfterShip sample: prices but every return has the same date → no monthly money
+  const noSpan = analyze([loadFile('a.csv', fx('aftership_returns_export.csv'))]);
+  assert.equal(noSpan.fixes.monthly, false);
+  const html = renderReportDocument(noSpan, { lang: 'en' });
+  assert.doesNotMatch(html, /≈ \$/);
+  assert.match(html, /these are totals, not monthly figures/);
+
+  // Dirty sample: no price, no dates
+  const dirty = analyze([loadFile('d.csv', fx('dirty_returns.csv'))]);
+  assert.equal(dirty.period, null);
+  assert.ok(dirty.fixes.items.every(i => i.unitPrice === null && i.amountPerMonth === null));
+});
+
+test('hero example matches the sample analysis', () => {
+  const a = analyze(HERO_EXAMPLE.sample.map(n => loadFile(n, fx(n))));
+  const p = a.products.find(x => x.product === HERO_EXAMPLE.product);
+  const c = p.sizes.find(x => x.size.size === HERO_EXAMPLE.size);
+  assert.equal(c.verdict, HERO_EXAMPLE.verdict);
+  assert.equal(c.returns, HERO_EXAMPLE.returns);
+  assert.equal(c.large.exchange + c.large.reason, HERO_EXAMPLE.n);
+  assert.equal(c.large.exchange, HERO_EXAMPLE.ex);
+  assert.equal(p.fitNote.text, HERO_EXAMPLE.fitNote);
+  const fix = a.fixes.items.find(i => i.product === HERO_EXAMPLE.product && i.size === HERO_EXAMPLE.size);
+  assert.equal(Math.round(fix.amountPerMonth), HERO_EXAMPLE.amountPerMonth);
+  assert.equal(a.currency, HERO_EXAMPLE.currency);
+});

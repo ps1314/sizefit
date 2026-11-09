@@ -3,7 +3,8 @@
 
 import { loadFile, ROLES, FORMATS, guessKind } from './formats.js';
 import { analyze } from './analyze.js';
-import { renderReport, renderReportDocument, REPORT_CSS } from './report.js';
+import { renderReport, renderReportDocument, REPORT_CSS, formatMoney } from './report.js';
+import { HERO_EXAMPLE } from './hero.js';
 import { CONFIG } from './config.js';
 import { track, trackingEnabled, rowBucket } from './track.js';
 import { t, initialLang, saveLang } from './i18n.js';
@@ -64,7 +65,7 @@ function renderFiles() {
     const opts = sel => [`<option value="">${esc(T('file.unused'))}</option>`, ...f.headers.map(h =>
       `<option value="${esc(h)}"${h === sel ? ' selected' : ''}>${esc(h)}</option>`)].join('');
     const roles = ROLES
-      .filter(role => f.kind === 'orders' || !['financialStatus', 'refundedAmount', 'price'].includes(role))
+      .filter(role => f.kind === 'orders' || !['financialStatus', 'refundedAmount'].includes(role))
       .map(role => `<label>${esc(T(`role.${role}`))}<select data-file="${i}" data-role="${role}">${opts(f.mapping[role])}</select></label>`)
       .join('');
     const missing = !(f.mapping.product || f.mapping.lineName || f.mapping.sku);
@@ -79,8 +80,9 @@ function renderFiles() {
           </select>
           <button type="button" class="link" data-remove="${i}" >${esc(T('file.remove'))}</button>
         </div>
-        <div class="fmt">${esc(T('file.meta', { rows: f.rows.length, dropped: f.droppedColumns.length }))}${f.droppedColumns.length
-          ? esc(T('file.metaColumns', { columns: f.droppedColumns.join(T('file.listSep')) })) : ''}</div>
+        <div class="fmt">${esc(T('file.meta', { rows: f.rows.length }))}${f.droppedColumns.length ? ` · <details class="removed">
+          <summary>${esc(T('file.removed', { n: f.droppedColumns.length }))}</summary>
+          <div>${esc(f.droppedColumns.join(T('file.listSep')))}</div></details>` : ''}</div>
         ${missing ? `<div class="err">${esc(T('file.missing'))}</div>` : ''}
         <details${f.format === 'generic' || missing ? ' open' : ''}>
           <summary>${esc(T('file.mapping'))}${f.format === 'generic' ? esc(T('file.mappingGuessed')) : ''}</summary>
@@ -105,6 +107,16 @@ function refresh() {
   renderOutput();
 }
 
+function renderHero() {
+  const h = HERO_EXAMPLE;
+  $('#heroCard').innerHTML = `
+    <div class="label">${esc(T('hero.cardLabel'))}</div>
+    <div class="what">${esc(h.product)} · ${esc(h.size)} <span class="badge">${esc(T(`verdict.${h.verdict}`))}</span></div>
+    <div class="stat">${esc(T('hero.cardStat', { returns: h.returns, n: h.n, ex: h.ex }))}</div>
+    <div class="money">${esc(T('hero.cardMoney', { amount: formatMoney(state.lang, h.amountPerMonth, h.currency) }))}</div>
+    <div class="note">${esc(T('hero.cardNote'))}<q lang="en">${esc(h.fitNote)}</q></div>`;
+}
+
 function renderChartInfo() {
   $('#chartInfo').textContent = state.chartName ? T('app.chartLoaded', { name: state.chartName }) : '';
 }
@@ -116,12 +128,40 @@ function applyLang() {
   for (const el of document.querySelectorAll('[data-i18n]')) el.textContent = T(el.dataset.i18n);
   for (const el of document.querySelectorAll('[data-i18n-label]')) el.setAttribute('aria-label', T(el.dataset.i18nLabel));
   for (const b of document.querySelectorAll('[data-lang]')) b.setAttribute('aria-pressed', String(b.dataset.lang === state.lang));
+  renderHero();
   renderChartInfo();
   refresh();
 }
 
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    ta.remove();
+    return ok;
+  }
+}
+
 // ---- events
 $('#pick').addEventListener('click', () => $('#fileInput').click());
+$('#tryMine').addEventListener('click', () => {
+  track('cta/try');
+  $('#upload').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+$('#seeSample').addEventListener('click', async () => {
+  track('cta/sample');
+  await loadSample(HERO_EXAMPLE.sample);
+  $('#exportbar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+$('#guide').addEventListener('toggle', e => { if (e.target.open) track('guide/open'); });
 $('#fileInput').addEventListener('change', e => { addFiles([...e.target.files]); e.target.value = ''; });
 const drop = $('#drop');
 drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('over'); });
@@ -151,9 +191,11 @@ document.addEventListener('click', async e => {
     state.files.splice(Number(btn.dataset.remove), 1);
     refresh();
   } else if (btn.dataset.copy) {
-    await navigator.clipboard?.writeText(btn.dataset.copy);
+    if (!(await copyText(btn.dataset.copy))) return;
+    const label = btn.textContent;
     btn.textContent = T('report.copied');
-    setTimeout(() => { btn.textContent = T('report.copy'); }, 1500);
+    btn.classList.add('done');
+    setTimeout(() => { btn.textContent = label; btn.classList.remove('done'); }, 1500);
   }
 });
 

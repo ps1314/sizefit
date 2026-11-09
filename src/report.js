@@ -11,12 +11,12 @@ export const REPORT_CSS = `
 .sf-report{--ink:#1d2330;--muted:#5d6675;--line:#e3e6eb;--card:#fff;--soft:#f5f6f8;
   --small:#b45309;--small-bg:#fef3c7;--large:#6d28d9;--large-bg:#ede9fe;--ok:#047857;--ok-bg:#d1fae5;
   --warn:#9a3412;--warn-bg:#ffedd5;--na:#6b7280;--na-bg:#f3f4f6;--accent:#1f4fd1;
-  color:var(--ink);font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+  color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
 @media (prefers-color-scheme: dark){.sf-report:not(.sf-light){--ink:#e7e9ee;--muted:#9aa3b2;--line:#2c323d;--card:#171b22;--soft:#1e232c;
   --small:#fbbf24;--small-bg:#3a2a07;--large:#c4b5fd;--large-bg:#2a1f4a;--ok:#6ee7b7;--ok-bg:#0d3326;
   --warn:#fdba74;--warn-bg:#3b1d0b;--na:#9ca3af;--na-bg:#262b33;--accent:#8fb0ff}}
-.sf-report h1{font-size:22px;margin:0 0 4px}
-.sf-report h2{font-size:17px;margin:28px 0 10px}
+.sf-report h1{font-size:24px;margin:0 0 6px}
+.sf-report h2{font-size:18px;margin:32px 0 12px}
 .sf-report h3{font-size:16px;margin:0}
 .sf-report .muted{color:var(--muted)}
 .sf-report .meta{color:var(--muted);font-size:13px;margin-bottom:16px}
@@ -26,7 +26,7 @@ export const REPORT_CSS = `
 .sf-report .kpi span{font-size:12px;color:var(--muted)}
 .sf-report .note{background:var(--warn-bg);color:var(--warn);border-radius:8px;padding:8px 12px;margin:8px 0;font-size:13px}
 .sf-report table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
-.sf-report th,.sf-report td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.sf-report th,.sf-report td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
 .sf-report th{font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap}
 .sf-report td.n,.sf-report th.n{text-align:right}
 .sf-report .scroll{overflow-x:auto}
@@ -40,13 +40,25 @@ export const REPORT_CSS = `
 .sf-report .v-normal{color:var(--ok);background:var(--ok-bg)}
 .sf-report .v-unconfirmed{color:var(--warn);background:var(--warn-bg)}
 .sf-report .v-insufficient{color:var(--na);background:var(--na-bg)}
-.sf-report .product{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:14px 0;break-inside:avoid}
+.sf-report .product{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;break-inside:avoid}
 .sf-report .phead{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;margin-bottom:10px}
 .sf-report .fitnote{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--soft);border-radius:8px;padding:10px 12px;margin:12px 0 6px}
 .sf-report .fitnote q{font-weight:600;quotes:"“" "”"}
 .sf-report .fitnote .meaning{flex-basis:100%;font-size:12px;color:var(--muted)}
-.sf-report .fitnote button{font:inherit;font-size:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;padding:2px 10px;cursor:pointer}
 .sf-report ul.sugg{margin:6px 0 0;padding-left:20px}
+.sf-report .sugghead{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.sf-report .suggbox button,.sf-report .fitnote button{font:inherit;font-size:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;padding:2px 10px;cursor:pointer}
+.sf-report button.done{border-color:var(--ok);color:var(--ok)}
+.sf-report .fixes{border:1px solid var(--accent);border-radius:14px;padding:4px 18px 14px;margin:16px 0 20px;background:var(--card)}
+.sf-report .fixes h2{margin-top:14px}
+.sf-report .fixes ol{list-style:none;margin:0;padding:0}
+.sf-report .fixes li{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+.sf-report .fixes li:last-child{border-bottom:none}
+.sf-report .fixes .rank{flex:none;width:28px;height:28px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--muted)}
+.sf-report .fixhead{font-size:15px}
+.sf-report .fixnums{display:flex;gap:16px;flex-wrap:wrap;margin:2px 0;font-variant-numeric:tabular-nums}
+.sf-report .fixnums .amount{font-weight:700;color:var(--accent)}
+.sf-report .fixtotal{font-weight:600;margin:8px 0 2px}
 .sf-report .why{font-size:12px;color:var(--muted)}
 .sf-report .rank td:first-child{color:var(--muted)}
 .sf-report footer{margin-top:28px;font-size:12px;color:var(--muted)}
@@ -54,6 +66,55 @@ export const REPORT_CSS = `
 @media print{.sf-report{--card:#fff;--soft:#f5f6f8;color:#000}.sf-report button{display:none}.sf-report .product{border-color:#ccc}}
 @media (max-width:640px){.sf-report .kpi b{font-size:18px}.sf-report th,.sf-report td{padding:6px 5px}}
 `;
+
+/** Money in the data's currency, no decimals; plain grouped number when the currency is unknown. */
+export function formatMoney(lang, amount, currency) {
+  const locale = lang === 'zh' ? 'zh-CN' : 'en-US';
+  if (/^[A-Z]{3}$/.test(currency || '')) {
+    try {
+      return new Intl.NumberFormat(locale, { style: 'currency', currency, maximumFractionDigits: 0, minimumFractionDigits: 0 }).format(amount);
+    } catch { /* unknown currency code */ }
+  }
+  return new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(amount);
+}
+
+const roundUnits = n => (n >= 10 ? Math.round(n) : Math.round(n * 10) / 10);
+
+/** "Fix these first" block. */
+function fixesSection(a, lang, badge, productName) {
+  const T = (k, p) => t(lang, k, p);
+  const f = a.fixes;
+  const days = a.period?.days;
+  const title = `<h2>${esc(T('fix.title'))}</h2>`;
+  if (!f.items.length) return `<section class="fixes">${title}<p class="muted">${esc(T('fix.none'))}</p></section>`;
+  const money = f.totalAmountPerMonth != null;
+  const intro = money ? T('fix.introMoney', { days })
+    : f.monthly ? T('fix.introUnitsMonthly', { days })
+      : T('fix.introUnits', { min: RULES.MIN_DAYS_FOR_MONTHLY });
+  const action = v => T(v === 'small' ? 'fix.actionSmall' : v === 'large' ? 'fix.actionLarge' : 'fix.actionReview');
+  const rows = f.items.map((it, i) => {
+    const units = it.unitsPerMonth != null
+      ? T('fix.unitsMonthly', { n: roundUnits(it.unitsPerMonth) })
+      : T('fix.units', { n: it.units });
+    const amount = it.amountPerMonth != null
+      ? `<span class="amount">${esc(T('fix.amountMonthly', { amount: formatMoney(lang, it.amountPerMonth, a.currency) }))}</span>` : '';
+    return `
+      <li>
+        <span class="rank">${i + 1}</span>
+        <div class="fixbody">
+          <div class="fixhead"><b>${productName(it)}</b> · <b>${esc(it.size)}</b> ${badge(it.verdict)}</div>
+          <div class="fixnums"><span>${esc(units)}</span>${amount}</div>
+          <div class="muted">${esc(action(it.verdict))}</div>
+        </div>
+      </li>`;
+  }).join('');
+  const total = money
+    ? T('fix.totalMoney', { count: f.items.length, units: roundUnits(f.totalUnitsPerMonth), amount: formatMoney(lang, f.totalAmountPerMonth, a.currency) })
+    : f.monthly && f.totalUnitsPerMonth != null
+      ? T('fix.totalUnitsMonthly', { count: f.items.length, units: roundUnits(f.totalUnitsPerMonth) })
+      : T('fix.totalUnits', { count: f.items.length, units: f.totalUnits });
+  return `<section class="fixes">${title}<ol>${rows}</ol><p class="fixtotal">${esc(total)}</p><p class="why">${esc(intro)}</p></section>`;
+}
 
 /** Render the language-neutral pieces of an analysis result. */
 export function whyText(lang, why) {
@@ -126,9 +187,11 @@ export function renderReport(a, { lang = 'en', generatedAt = new Date() } = {}) 
       const review = p.sizes.some(c => c.verdict === 'unconfirmed');
       note = `<div class="fitnote muted">${esc(T(review ? 'report.fitNoteNoneReview' : 'report.fitNoteNoneData'))}</div>`;
     }
-    const sugg = p.suggestions.length
-      ? `<div><b>${esc(T('report.suggTitle'))}</b>${p.hasChart ? '' : ` <span class="muted">${esc(T('report.suggNoChart'))}</span>`}
-        <ul class="sugg">${p.suggestions.map(s => `<li>${esc(suggestionText(lang, s))}</li>`).join('')}</ul></div>`
+    const suggLines = p.suggestions.map(s => suggestionText(lang, s));
+    const sugg = suggLines.length
+      ? `<div class="suggbox"><div class="sugghead"><b>${esc(T('report.suggTitle'))}</b>${p.hasChart ? '' : ` <span class="muted">${esc(T('report.suggNoChart'))}</span>`}
+          <button type="button" data-copy="${esc(`${p.product}\n${suggLines.join('\n')}`)}" data-copied="${esc(T('report.copied'))}">${esc(T('report.copyAll'))}</button></div>
+        <ul class="sugg">${suggLines.map(l => `<li>${esc(l)}</li>`).join('')}</ul></div>`
       : '';
     const meta = [T('report.productReturns', { n: p.returns })];
     if (p.sold) meta.push(T('report.productSales', { sold: p.sold, rate: pct(p.returnRate) }));
@@ -181,6 +244,7 @@ export function renderReport(a, { lang = 'en', generatedAt = new Date() } = {}) 
   <div class="meta">${esc(T('report.generated', { time: generatedAt.toISOString().slice(0, 16).replace('T', ' ') }))} ·
     ${esc(T('report.data'))}${esc(files)}${a.chartRows ? ` · ${esc(T('report.chartRows', { n: a.chartRows }))}` : ''}</div>
   ${notes.map(n => `<div class="note">${esc(n)}</div>`).join('')}
+  ${fixesSection(a, lang, badge, productName)}
   <div class="kpis">
     <div class="kpi"><b>${tot.returns}</b><span>${esc(T('report.kpiReturns'))}</span></div>
     ${a.hasSales ? `<div class="kpi"><b>${tot.sold}</b><span>${esc(T('report.kpiSold'))}</span></div>` : ''}

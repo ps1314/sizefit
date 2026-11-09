@@ -116,6 +116,16 @@ node scripts/cli-report.js --lang en --chart fixtures/size_chart.csv --out repor
 
 fit note：判定偏差的尺码占已判定尺码的一半以上时写 `Runs small/large — we recommend sizing up/down.`，只有个别尺码时写 `Size XL runs large — if you're between sizes…`，偏大偏小都有时提示看尺码表；有「待确认」的尺码时不写 `True to size`。
 
+### 「先改这几个」和金额估算
+
+报告最上面列出最该先改的 1–3 个「款 × 尺码」：先列判定偏小 / 偏大的，再列待确认的，各自按尺码相关退货件数排序（`estimateFixes`，阈值在 `RULES`）。
+
+- 金额 ≈ 尺码相关退货件数 × 单价 × (30.44 ÷ 数据覆盖天数)，单价优先用该尺码的平均价，没有就用该款平均价。这是「涉及的退货金额」估算，不是实际损失。
+- 单价来自订单导出的 `Lineitem price`、AfterShip 的 `Product price`、Loop 的 `price`；日期来自 `Created at`、`Request time`、`returned_at` 等；币种来自 `Currency` 列。
+- 数据覆盖不到 14 天、或没有日期时，不折算成每月，只给总件数；没有单价时只给件数/月，不给金额。
+
+首屏示例卡片里的数字来自「订单 + Loop」样例的真实分析结果（`src/hero.js`），有测试保证两者一致。
+
 尺码表建议：把该围度调整「到相邻尺码差值的一半」（约半个码，四舍五入到 0.5），比如 M 胸围 98、L 胸围 104，M 偏小 → 建议 +3cm。尺码表 CSV 格式见 `fixtures/size_chart.csv`（`Product, Size, Chest (cm), …`，Product 列可省略）。
 
 ## 隐私
@@ -163,6 +173,7 @@ src/formats.js      格式识别、列映射、丢弃个人信息列
 src/analyze.js      汇总和判断规则、fit note、尺码表建议
 src/report.js       报告 HTML
 src/app.js          浏览器交互
+src/hero.js         首屏示例卡片的数据（来自样例分析）
 src/config.js       统计代码、登记意向表单链接（留空即关闭）
 src/i18n.js         全部界面和报告文案（中文 / 英文）、语言检测和切换
 src/track.js        GoatCounter 事件

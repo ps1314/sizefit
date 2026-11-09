@@ -18,6 +18,9 @@ export const RULES = {
   HIGH_RATE_MIN_SOLD: 20,    // ≥20 sold,
   HIGH_RATE_MULT: 1.5,       // a rate ≥1.5× the product baseline,
   HIGH_RATE_MIN_GAP: 0.05,   // and at least 5 percentage points above it
+  MIN_DAYS_FOR_MONTHLY: 14,  // monthly estimates need data covering at least two weeks
+  DAYS_PER_MONTH: 30.44,
+  MAX_FIXES: 3,              // "fix these first" shows at most this many product × size rows
 };
 
 export const VERDICTS = ['small', 'large', 'normal', 'unconfirmed', 'insufficient'];
@@ -26,6 +29,20 @@ const num = v => {
   const n = parseFloat(String(v ?? '').replace(/[^0-9.\-]/g, ''));
   return Number.isFinite(n) ? n : NaN;
 };
+
+/** Day-precision timestamp from "2026-05-01 10:20:00 -0400", "2026-05-01T…", "2026-05", "5/1/2026"; NaN otherwise. */
+export function parseDate(v) {
+  const s = String(v ?? '').trim();
+  let m = s.match(/^(\d{4})-(\d{1,2})(?:-(\d{1,2}))?/);
+  if (m) return Date.UTC(+m[1], +m[2] - 1, m[3] ? +m[3] : 1);
+  m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if (m) return Date.UTC(+m[3], +m[1] - 1, +m[2]);
+  if (/\b\d{4}\b/.test(s)) {
+    const t = Date.parse(s);
+    if (Number.isFinite(t)) { const d = new Date(t); return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()); }
+  }
+  return NaN;
+}
 
 function lineIdentity(row, m) {
   const get = role => (m[role] ? (row[m[role]] || '').trim() : '');
@@ -58,7 +75,10 @@ function exchangeSize(value, header) {
 /** Convert one loaded file into normalised sale / return records. */
 export function toRecords(file, { inferReturnsFromRefunds = true } = {}) {
   const m = file.mapping;
-  const out = { records: [], skipped: { noSize: 0, oneSize: 0, ambiguousRefund: 0 } };
+  const out = { records: [], skipped: { noSize: 0, oneSize: 0, ambiguousRefund: 0 }, currency: '' };
+  if (m.currency) out.currency = (file.rows.find(r => (r[m.currency] || '').trim())?.[m.currency] || '').trim().toUpperCase();
+  const dateOf = row => (m.date ? parseDate(row[m.date]) : NaN);
+  const priceOf = row => (m.price ? num(row[m.price]) : NaN);
   const push = (rec) => {
     if (!rec.size) { out.skipped.noSize += rec.qty; return; }
     if (rec.size.family === 'one') { out.skipped.oneSize += rec.qty; return; }
@@ -73,17 +93,19 @@ export function toRecords(file, { inferReturnsFromRefunds = true } = {}) {
       const id = m.orderId ? row[m.orderId] : '';
       const status = m.financialStatus ? row[m.financialStatus] : '';
       if (!current || (id && id !== current.id) || (!id && status)) {
-        current = { id, status: '', refunded: NaN, lines: [] };
+        current = { id, status: '', refunded: NaN, date: NaN, lines: [] };
         orders.push(current);
       }
       if (status) current.status = status.toLowerCase();
+      const date = dateOf(row);
+      if (Number.isFinite(date)) current.date = date;
       if (m.refundedAmount && row[m.refundedAmount] !== '') current.refunded = num(row[m.refundedAmount]);
       const ident = lineIdentity(row, m);
       const qty = Math.max(1, Math.round(num(m.qty ? row[m.qty] : 1)) || 1);
-      current.lines.push({ ...ident, qty, price: num(m.price ? row[m.price] : NaN) });
+      current.lines.push({ ...ident, qty, price: priceOf(row) });
     }
     for (const o of orders) {
-      for (const l of o.lines) push({ type: 'sale', product: l.product, size: l.size, qty: l.qty });
+      for (const l of o.lines) push({ type: 'sale', product: l.product, size: l.size, qty: l.qty, price: l.price, date: o.date });
       if (!inferReturnsFromRefunds) continue;
       let returned = [];
       if (o.status === 'refunded') returned = o.lines;
@@ -96,7 +118,7 @@ export function toRecords(file, { inferReturnsFromRefunds = true } = {}) {
         else out.skipped.ambiguousRefund++;
       }
       for (const l of returned) {
-        push({ type: 'return', product: l.product, size: l.size, qty: l.qty, reason: 'unknown', exchange: null, source: 'refund' });
+        push({ type: 'return', product: l.product, size: l.size, qty: l.qty, reason: 'unknown', exchange: null, source: 'refund', price: l.price, date: o.date });
       }
     }
     return out;
@@ -116,7 +138,7 @@ export function toRecords(file, { inferReturnsFromRefunds = true } = {}) {
       if (cmp === -1) exchange = 'small';   // swapped to a bigger size → original runs small
       else if (cmp === 1) exchange = 'large';
     }
-    push({ type: 'return', product: ident.product, size: ident.size, qty, reason: cls, exchange, source: 'returns' });
+    push({ type: 'return', product: ident.product, size: ident.size, qty, reason: cls, exchange, source: 'returns', price: priceOf(row), date: dateOf(row) });
   }
   return out;
 }
@@ -132,7 +154,46 @@ function emptyCell(size) {
   return {
     size, sold: 0, returns: 0,
     small: { exchange: 0, reason: 0 }, large: { exchange: 0, reason: 0 },
-    fit: 0, other: 0, unknown: 0,
+    fit: 0, other: 0, unknown: 0, priceSum: 0, priceUnits: 0,
+  };
+}
+
+/**
+ * "Fix these first": up to MAX_FIXES product × size rows, sizes judged small/large first, then
+ * "needs review", each ordered by size-related return units. Money is only estimated when both a
+ * unit price and dates covering ≥ MIN_DAYS_FOR_MONTHLY days exist:
+ *   amount / month ≈ size-related return units × unit price × (DAYS_PER_MONTH / days covered)
+ * Without dates only unit totals are given; without prices, units per month but no amount.
+ */
+export function estimateFixes(products, period) {
+  const R = RULES;
+  const factor = period && period.days >= R.MIN_DAYS_FOR_MONTHLY ? R.DAYS_PER_MONTH / period.days : null;
+  const rank = v => (v === 'small' || v === 'large' ? 0 : v === 'unconfirmed' ? 1 : 2);
+  const candidates = [];
+  for (const p of products) {
+    for (const c of p.sizes) {
+      if (rank(c.verdict) > 1 || !c.evidence) continue;
+      const unitPrice = c.unitPrice ?? p.unitPrice ?? null;
+      candidates.push({
+        product: p.product,
+        size: c.size.size,
+        verdict: c.verdict,
+        units: c.evidence,
+        unitPrice,
+        unitsPerMonth: factor ? c.evidence * factor : null,
+        amountPerMonth: factor && unitPrice ? c.evidence * unitPrice * factor : null,
+      });
+    }
+  }
+  candidates.sort((a, b) => (rank(a.verdict) - rank(b.verdict)) || (b.units - a.units));
+  const items = candidates.slice(0, R.MAX_FIXES);
+  const sum = k => (items.every(i => i[k] != null) && items.length ? items.reduce((a, i) => a + i[k], 0) : null);
+  return {
+    items,
+    monthly: factor != null,
+    totalUnits: items.reduce((a, i) => a + i.units, 0),
+    totalUnitsPerMonth: sum('unitsPerMonth'),
+    totalAmountPerMonth: sum('amountPerMonth'),
   };
 }
 
@@ -304,11 +365,21 @@ export function analyze(files, { chartText = '' } = {}) {
   const hasSales = files.some(f => f.kind === 'orders');
   const skipped = { noSize: 0, oneSize: 0, ambiguousRefund: 0 };
   const records = [];
+  let currency = '';
   for (const f of files) {
     const r = toRecords(f, { inferReturnsFromRefunds: !hasReturnsFile });
     records.push(...r.records);
     for (const k of Object.keys(skipped)) skipped[k] += r.skipped[k];
+    currency ||= r.currency;
   }
+  let minDate = Infinity;
+  let maxDate = -Infinity;
+  for (const r of records) {
+    if (Number.isFinite(r.date)) { minDate = Math.min(minDate, r.date); maxDate = Math.max(maxDate, r.date); }
+  }
+  const period = Number.isFinite(minDate)
+    ? { from: minDate, to: maxDate, days: Math.round((maxDate - minDate) / 86400000) + 1 }
+    : null;
 
   const products = new Map();
   for (const rec of records) {
@@ -318,6 +389,7 @@ export function analyze(files, { chartText = '' } = {}) {
     const sk = `${rec.size.family}:${rec.size.size}`;
     if (!p.cells.has(sk)) p.cells.set(sk, emptyCell(rec.size));
     const c = p.cells.get(sk);
+    if (Number.isFinite(rec.price) && rec.price > 0) { c.priceSum += rec.price * rec.qty; c.priceUnits += rec.qty; }
     if (rec.type === 'sale') { c.sold += rec.qty; continue; }
     c.returns += rec.qty;
     if (rec.exchange) c[rec.exchange].exchange += rec.qty;
@@ -341,8 +413,9 @@ export function analyze(files, { chartText = '' } = {}) {
     const sizes = cells.map(c => {
       const j = judgeCell(c, { hasSales, baselineRate, avgReturnsPerSize });
       const evidence = c.small.exchange + c.small.reason + c.large.exchange + c.large.reason + c.fit;
-      return { ...c, ...j, evidence };
+      return { ...c, ...j, evidence, unitPrice: c.priceUnits ? c.priceSum / c.priceUnits : null };
     });
+    const priceUnits = cells.reduce((a, c) => a + c.priceUnits, 0);
     const sizeIssueUnits = sizes.reduce((a, c) => a + c.evidence, 0);
     const flagged = sizes.filter(c => c.verdict === 'small' || c.verdict === 'large').length;
     const unconfirmed = sizes.filter(c => c.verdict === 'unconfirmed').length;
@@ -350,6 +423,7 @@ export function analyze(files, { chartText = '' } = {}) {
       product: p.product,
       sold, returns, sizeIssueUnits, flagged, unconfirmed,
       returnRate: sold ? returns / sold : null,
+      unitPrice: priceUnits ? cells.reduce((a, c) => a + c.priceSum, 0) / priceUnits : null,
       sizes,
       fitNote: fitNote(sizes),
       suggestions: chartSuggestions(p.product, sizes, chart),
@@ -368,6 +442,9 @@ export function analyze(files, { chartText = '' } = {}) {
   }
   return {
     products: result,
+    fixes: estimateFixes(result, period),
+    period,
+    currency,
     totals,
     hasSales,
     hasReturnsFile,

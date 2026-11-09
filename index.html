@@ -6,51 +6,85 @@
 <title>SizeFit</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%231f4fd1'/><path d='M8 22h16M8 16h11M8 10h6' stroke='white' stroke-width='3' stroke-linecap='round'/></svg>">
 <style>
-:root{--ink:#1d2330;--muted:#5d6675;--line:#e3e6eb;--card:#fff;--bg:#f4f5f7;--soft:#eef0f3;--accent:#1f4fd1;--accent-ink:#fff;--ok:#047857;--warn:#9a3412}
-@media (prefers-color-scheme: dark){:root{--ink:#e7e9ee;--muted:#9aa3b2;--line:#2c323d;--card:#171b22;--bg:#0f1217;--soft:#1e232c;--accent:#7f9cff;--accent-ink:#0f1217;--ok:#6ee7b7;--warn:#fdba74}}
+:root{--ink:#1d2330;--muted:#5d6675;--line:#e3e6eb;--card:#fff;--bg:#f5f6f8;--soft:#eef0f3;--accent:#1f4fd1;--accent-soft:#e8eefc;--accent-ink:#fff;--ok:#047857;--warn:#9a3412;--large:#6d28d9;--large-bg:#ede9fe}
+@media (prefers-color-scheme: dark){:root{--ink:#e7e9ee;--muted:#9aa3b2;--line:#2c323d;--card:#171b22;--bg:#0f1217;--soft:#1e232c;--accent:#7f9cff;--accent-soft:#1c2440;--accent-ink:#0f1217;--ok:#6ee7b7;--warn:#fdba74;--large:#c4b5fd;--large-bg:#2a1f4a}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
-.wrap{max-width:1080px;margin:0 auto;padding:24px 16px 64px}
-header.top{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
-header.top h1{font-size:22px;margin:0}
-header.top p{margin:0;color:var(--muted);flex:1;min-width:200px}
-.lang{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;align-self:center}
-.lang button{border:none;border-radius:0;padding:4px 10px;font-size:13px;background:var(--card);color:var(--muted)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:20px 16px 72px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:18px}
+.brand svg{flex:none}
+.lang{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.lang button{border:none;border-radius:0;padding:4px 12px;font-size:13px;background:var(--card);color:var(--muted)}
 .lang button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);font-weight:600}
-.privacy{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--ok);margin:4px 0 18px}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
-.panel h2{font-size:15px;margin:0 0 10px}
-.drop{border:2px dashed var(--line);border-radius:10px;padding:22px;text-align:center;color:var(--muted);transition:border-color .15s,background .15s}
-.drop.over{border-color:var(--accent);background:var(--soft)}
-.drop b{color:var(--ink)}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:32px;align-items:center;padding:36px 0 40px}
+.hero h1{font-size:40px;line-height:1.15;letter-spacing:-.01em;margin:0 0 14px}
+.hero .sub{font-size:17px;color:var(--muted);margin:0 0 24px;max-width:560px}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.cta button{font-size:16px;padding:11px 20px;border-radius:10px}
+.privacy{font-size:14px;color:var(--ok);max-width:560px}
+.privacy summary{cursor:pointer;list-style:none;display:inline}
+.privacy summary::-webkit-details-marker{display:none}
+.privacy summary .more{color:var(--muted);text-decoration:underline;text-underline-offset:2px;margin-left:6px;font-size:13px}
+.privacy p{color:var(--muted);font-size:13px;margin:8px 0 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;box-shadow:0 10px 30px rgba(20,30,60,.08)}
+.card .label{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:10px}
+.card .what{font-size:19px;font-weight:700;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.card .badge{display:inline-block;border-radius:999px;padding:1px 10px;font-size:13px;font-weight:600;color:var(--large);background:var(--large-bg)}
+.card .stat{margin:10px 0 6px}
+.card .money{font-size:22px;font-weight:700;color:var(--accent);margin:6px 0 14px}
+.card .note{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14px}
+.card .note q{font-weight:600;display:block;margin-top:2px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:16px}
+.panel h2{font-size:17px;margin:0 0 14px}
+.drop{border:2px dashed var(--line);border-radius:12px;padding:28px 20px;text-align:center;color:var(--muted);transition:border-color .15s,background .15s}
+.drop.over{border-color:var(--accent);background:var(--accent-soft)}
+.drop p{margin:0 0 8px}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-button,.btn{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:6px 12px;cursor:pointer}
+button,.btn{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:7px 14px;cursor:pointer}
 button:hover,.btn:hover{border-color:var(--accent)}
 button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
 button.link{border:none;background:none;color:var(--muted);padding:2px 6px}
 input[type=file]{display:none}
-.samples{margin-top:12px;font-size:13px;color:var(--muted)}
-.samples button{font-size:13px;padding:3px 10px}
-.file{border-top:1px solid var(--line);padding:12px 0 4px}
+.samples{margin-top:14px;font-size:14px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.samples button{font-size:13px;padding:4px 12px}
+.guide{margin-top:16px;border-top:1px solid var(--line);padding-top:12px}
+.guide>summary{font-weight:600;color:var(--accent);cursor:pointer}
+.guide .cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:12px}
+.guide h3{font-size:14px;margin:0 0 6px}
+.guide ol{margin:0;padding-left:20px;font-size:14px;color:var(--muted)}
+.guide li{margin:4px 0}
+.guide .tip{font-size:13px;color:var(--muted);margin:12px 0 0}
+.file{border-top:1px solid var(--line);padding:14px 0 6px}
 .file:first-child{border-top:none;padding-top:0}
 .file .name{font-weight:600;word-break:break-all}
-.file .fmt{font-size:12px;color:var(--muted)}
-.tag{display:inline-block;font-size:12px;border-radius:999px;padding:0 8px;background:var(--soft);color:var(--muted)}
-details summary{cursor:pointer;color:var(--accent);font-size:13px;margin-top:6px}
-.map{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px 14px;margin-top:10px}
-.map label{display:flex;flex-direction:column;font-size:12px;color:var(--muted);gap:2px}
-select{font:inherit;font-size:13px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);max-width:100%}
-.exportbar{position:sticky;top:0;z-index:2;display:none;gap:8px;align-items:center;flex-wrap:wrap;background:var(--bg);padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:8px}
+.fmt{font-size:13px;color:var(--muted)}
+.file .removed{color:var(--ok)}
+.file .removed summary{cursor:pointer;display:inline;color:var(--ok);font-size:13px;margin:0}
+.tag{display:inline-block;font-size:12px;border-radius:999px;padding:0 9px;background:var(--soft);color:var(--muted)}
+details summary{cursor:pointer;color:var(--accent);font-size:14px;margin-top:6px}
+.map{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px 16px;margin-top:12px}
+.map label{display:flex;flex-direction:column;font-size:12px;color:var(--muted);gap:3px}
+select{font:inherit;font-size:13px;padding:5px 7px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);max-width:100%}
+.exportbar{position:sticky;top:0;z-index:2;display:none;gap:8px;align-items:center;flex-wrap:wrap;background:var(--bg);padding:12px 0;border-bottom:1px solid var(--line);margin-bottom:10px}
 .exportbar.show{display:flex}
 .exportbar .sp{flex:1}
-#report{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px}
+#report{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px}
 #report:empty{display:none}
 .empty{color:var(--muted);text-align:center;padding:28px 0}
-.waitlist{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--card);border:1px solid var(--accent);border-radius:12px;padding:16px;margin-top:14px}
+.waitlist{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--card);border:1px solid var(--accent);border-radius:14px;padding:20px;margin-top:16px}
 .waitlist[hidden]{display:none}
-.waitlist p{margin:4px 0 0;color:var(--muted);font-size:13px;max-width:560px}
+.waitlist p{margin:4px 0 0;color:var(--muted);font-size:14px;max-width:600px}
 .waitlist button{white-space:normal;text-align:left}
 .err{color:var(--warn);font-size:13px;margin-top:8px}
+@media (max-width:820px){
+  .hero{grid-template-columns:1fr;gap:24px;padding:20px 0 28px}
+  .hero h1{font-size:30px}
+  .hero .sub{font-size:16px}
+  .guide .cols{grid-template-columns:1fr}
+  .panel{padding:18px 16px}
+  #report{padding:16px}
+}
 @media print{
   body{background:#fff}
   .wrap{padding:0;max-width:none}
@@ -61,23 +95,35 @@ select{font:inherit;font-size:13px;padding:4px 6px;border:1px solid var(--line);
 </head>
 <body>
 <div class="wrap">
-  <header class="top no-print">
-    <h1>SizeFit</h1>
-    <p data-i18n="app.tagline"></p>
+  <div class="topbar no-print">
+    <div class="brand"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#1f4fd1"/><path d="M8 22h16M8 16h11M8 10h6" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>SizeFit</div>
     <div class="lang" role="group" data-i18n-label="lang.switch">
       <button type="button" data-lang="zh" lang="zh-CN">中文</button><button type="button" data-lang="en" lang="en">EN</button>
     </div>
-  </header>
-  <div class="privacy no-print">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="flex:none;margin-top:2px"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-    <span><span data-i18n="app.privacy"></span> <span id="analyticsNote" data-i18n="app.analyticsNote" hidden></span></span>
   </div>
 
-  <section class="panel no-print">
+  <section class="hero no-print">
+    <div>
+      <h1 data-i18n="hero.title"></h1>
+      <p class="sub" data-i18n="hero.subtitle"></p>
+      <div class="cta">
+        <button type="button" class="primary" id="tryMine" data-i18n="hero.tryMine"></button>
+        <button type="button" id="seeSample" data-i18n="hero.seeSample"></button>
+      </div>
+      <details class="privacy">
+        <summary><span data-i18n="app.privacyShort"></span><span class="more" data-i18n="app.privacyMore"></span></summary>
+        <p data-i18n="app.privacy"></p>
+        <p id="analyticsNote" data-i18n="app.analyticsNote" hidden></p>
+      </details>
+    </div>
+    <div class="card" id="heroCard" aria-live="off"></div>
+  </section>
+
+  <section class="panel no-print" id="upload">
     <h2 data-i18n="app.uploadTitle"></h2>
     <div class="drop" id="drop">
       <p><span data-i18n="app.dropPrompt"></span> <button type="button" class="primary" id="pick" data-i18n="app.pick"></button></p>
-      <p style="margin:0;font-size:13px" data-i18n="app.supported"></p>
+      <p style="margin:0;font-size:14px" data-i18n="app.supported"></p>
       <input type="file" id="fileInput" accept=".csv,text/csv" multiple>
     </div>
     <div class="samples"><span data-i18n="app.samplesLabel"></span>
@@ -86,8 +132,16 @@ select{font:inherit;font-size:13px;padding:4px 6px;border:1px solid var(--line);
       <button type="button" data-sample="shopify_orders_export.csv,loop_returns.csv" data-i18n="app.sample.ordersLoop"></button>
       <button type="button" data-sample="dirty_returns.csv" data-i18n="app.sample.dirty"></button>
     </div>
+    <details class="guide" id="guide">
+      <summary data-i18n="guide.title"></summary>
+      <div class="cols">
+        <div><h3 data-i18n="guide.ordersTitle"></h3><ol><li data-i18n="guide.orders1"></li><li data-i18n="guide.orders2"></li><li data-i18n="guide.orders3"></li></ol></div>
+        <div><h3 data-i18n="guide.returnsTitle"></h3><ol><li data-i18n="guide.returns1"></li><li data-i18n="guide.returns2"></li><li data-i18n="guide.returns3"></li></ol></div>
+        <div><h3 data-i18n="guide.appsTitle"></h3><ol><li data-i18n="guide.apps1"></li><li data-i18n="guide.apps2"></li><li data-i18n="guide.apps3"></li></ol></div>
+      </div>
+      <p class="tip" data-i18n="guide.tip"></p>
+    </details>
   </section>
-
   <section class="panel no-print" id="filesPanel" hidden>
     <h2 data-i18n="app.filesTitle"></h2>
     <div id="files"></div>

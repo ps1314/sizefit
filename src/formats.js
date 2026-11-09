@@ -8,7 +8,7 @@ import { parseCSV } from './csv.js';
 
 // Column roles. Labels live in the i18n dictionary ("role.<name>").
 export const ROLES = ['product', 'variant', 'lineName', 'sku', 'qty', 'reason', 'subReason', 'note', 'staffNote',
-  'exchange', 'outcome', 'orderId', 'financialStatus', 'refundedAmount', 'price'];
+  'exchange', 'outcome', 'orderId', 'financialStatus', 'refundedAmount', 'price', 'date', 'currency'];
 
 export const norm = h => String(h).toLowerCase().replace(/[^a-z0-9一-鿿]/g, '');
 
@@ -42,6 +42,8 @@ export const FORMATS = {
       sku: ['Lineitem SKU', 'Lineitem sku'],
       qty: ['Lineitem quantity'],
       price: ['Lineitem price'],
+      date: ['Created at', 'Paid at'],
+      currency: ['Currency'],
       orderId: ['Name', 'Id'],
       financialStatus: ['Financial Status'],
       refundedAmount: ['Refunded Amount'],
@@ -49,7 +51,8 @@ export const FORMATS = {
   },
   shopify_returns: {
     kind: 'returns',
-    signature: ['returnlineitemreason', 'productvarianttitleattimeofsale', 'producttitleattimeofsale', 'returnedquantity'],
+    signature: ['returnlineitemreason', 'productvarianttitleattimeofsale', 'producttitleattimeofsale', 'returnedquantity',
+      'reversedquantity', 'productvarianttitle', 'productvariantsku'],
     map: {
       product: ['product_title_at_time_of_sale', 'Product title at time of sale', 'Product title'],
       variant: ['product_variant_title_at_time_of_sale', 'Product variant title at time of sale', 'Product variant title'],
@@ -58,6 +61,7 @@ export const FORMATS = {
       reason: ['return_line_item_reason', 'Return line item reason', 'Return reason'],
       note: ['return_customer_note', 'Return customer note'],
       staffNote: ['return_note', 'Return note'],
+      date: ['day', 'Day', 'month', 'Month', 'date', 'Date'],
     },
   },
   aftership: {
@@ -73,6 +77,9 @@ export const FORMATS = {
       exchange: ['Customer exchange notes'],
       outcome: ['RMA outcome', 'Legacy RMA resolution'],
       orderId: ['Order number'],
+      price: ['Product price', 'Return item value'],
+      date: ['Request time', 'Order time'],
+      currency: ['Currency'],
     },
   },
   loop: {
@@ -89,6 +96,9 @@ export const FORMATS = {
       exchange: ['exchange_variant', 'exchange_variant_title', 'exchange_sku'],
       outcome: ['outcome'],
       orderId: ['order_name', 'order_id'],
+      price: ['price'],
+      date: ['returned_at', 'created_at'],
+      currency: ['currency'],
     },
   },
 };
@@ -106,6 +116,9 @@ const GENERIC = {
   exchange: ['exchangevariant', 'exchangesku', 'exchangeitem', 'exchangeproduct', 'exchange', '换货'],
   outcome: ['outcome', 'resolution', 'returntype', 'returnmethod', 'type'],
   orderId: ['ordernumber', 'ordername', 'orderid', 'order'],
+  price: ['unitprice', 'productprice', 'itemprice', 'lineitemprice', 'price', '单价', '价格'],
+  date: ['createdat', 'returnedat', 'requesttime', 'returndate', 'orderdate', 'date', 'created', '日期', '时间'],
+  currency: ['currency', '币种'],
 };
 
 function findHeader(headers, candidates) {
