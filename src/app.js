@@ -249,7 +249,10 @@ $('#print').addEventListener('click', () => {
 $('#waitlistBtn').addEventListener('click', () => {
   if (!waitlistOn) return;
   track('waitlist');
-  window.open(waitlistUrl, '_blank', 'noopener');
+  // Tally hidden field "lang" records which UI language the visitor used.
+  const url = new URL(waitlistUrl);
+  url.searchParams.set('lang', state.lang);
+  window.open(url.href, '_blank', 'noopener');
 });
 
 applyLang();
