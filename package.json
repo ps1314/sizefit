@@ -1,0 +1,14 @@
+{
+  "name": "sizefit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Upload Shopify order / return CSV exports and find which sizes run small or large.",
+  "type": "module",
+  "scripts": {
+    "start": "node serve.js",
+    "test": "node --test test/*.test.js",
+    "fixtures": "node scripts/make-fixtures.js",
+    "report": "node scripts/cli-report.js"
+  },
+  "engines": { "node": ">=18" }
+}

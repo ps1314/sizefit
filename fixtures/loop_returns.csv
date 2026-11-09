@@ -1,0 +1,330 @@
+return_id,order_name,customer_email,line_item_id,title,sku,variant_id,price,return_reason,parent_return_reason,return_comment,outcome,exchange_variant,returned_at
+900003,#7004,buyer6003@example.com,1200003,Linen Wrap Dress,LWD-OLI-S,4400003,120.00,Changed Mind,Didn't Like,,refund,,2026-10-02T12:00:00Z
+900014,#7015,buyer6014@example.com,1200014,High Rise Straight Jean,HRJ-BLA-24,4400014,89.00,Defective,Quality,,credit,,2026-10-02T12:00:00Z
+900024,#7025,buyer6024@example.com,1200024,Ribbed Knit Cardigan,RKC-CRE-XL,4400024,95.00,Too Large,Size/Fit,,refund,,2026-10-02T12:00:00Z
+900025,#7026,buyer6025@example.com,1200025,High Rise Straight Jean,HRJ-IND-24,4400025,89.00,Other,Other,,credit,,2026-10-02T12:00:00Z
+900029,#7030,buyer6029@example.com,1200029,Canvas Tote,CTB-NAT-OS,4400029,35.00,Defective,Quality,,refund,,2026-10-02T12:00:00Z
+900045,#7046,buyer6045@example.com,1200045,Classic Crew Tee,CCT-BLA-S,4400045,28.00,Too Small,Size/Fit,,exchange,M / Black,2026-10-02T12:00:00Z
+900048,#7049,buyer6048@example.com,1200048,Classic Crew Tee,CCT-WHI-XS,4400048,28.00,Too Large,Size/Fit,,credit,,2026-10-02T12:00:00Z
+900060,#7061,buyer6060@example.com,1200060,Linen Wrap Dress,LWD-OLI-XL,4400060,120.00,Too Large,Size/Fit,,exchange,L / Olive,2026-10-02T12:00:00Z
+900067,#7068,buyer6067@example.com,1200067,High Rise Straight Jean,HRJ-IND-28,4400067,89.00,Too Large,Size/Fit,,exchange,26 / Indigo,2026-10-02T12:00:00Z
+900069,#7070,buyer6069@example.com,1200069,Linen Wrap Dress,LWD-SAN-S,4400069,120.00,Other,Other,,credit,,2026-10-02T12:00:00Z
+900084,#7085,buyer6084@example.com,1200084,High Rise Straight Jean,HRJ-IND-24,4400084,89.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+900092,#7093,buyer6092@example.com,1200092,Ribbed Knit Cardigan,RKC-CRE-XL,4400092,95.00,Too Large,Size/Fit,,exchange,L / Cream,2026-10-02T12:00:00Z
+900106,#7107,buyer6106@example.com,1200106,Canvas Tote,CTB-NAT-OS,4400106,35.00,Defective,Quality,,refund,,2026-10-02T12:00:00Z
+900114,#7115,buyer6114@example.com,1200114,Ribbed Knit Cardigan,RKC-CRE-L,4400114,95.00,Defective,Quality,,refund,,2026-10-02T12:00:00Z
+900116,#7117,buyer6116@example.com,1200116,High Rise Straight Jean,HRJ-IND-28,4400116,89.00,Too Large,Size/Fit,,credit,,2026-10-02T12:00:00Z
+900118,#7119,buyer6118@example.com,1200118,High Rise Straight Jean,HRJ-IND-30,4400118,89.00,Too Large,Size/Fit,,exchange,28 / Indigo,2026-10-02T12:00:00Z
+900121,#7122,buyer6121@example.com,1200121,Linen Wrap Dress,LWD-SAN-S,4400121,120.00,Changed Mind,Didn't Like,,refund,,2026-10-02T12:00:00Z
+900137,#7138,buyer6137@example.com,1200137,Everyday Hoodie,EDH-GRE-L,4400137,65.00,Changed Mind,Didn't Like,,refund,,2026-10-02T12:00:00Z
+900160,#7161,buyer6160@example.com,1200160,Linen Wrap Dress,LWD-SAN-M,4400160,120.00,Too Large,Size/Fit,,credit,,2026-10-02T12:00:00Z
+900165,#7166,buyer6165@example.com,1200165,Everyday Hoodie,EDH-GRE-S,4400165,65.00,Too Small,Size/Fit,,exchange,M / Grey,2026-10-02T12:00:00Z
+900166,#7167,buyer6166@example.com,1200166,Classic Crew Tee,CCT-WHI-XS,4400166,28.00,Too Small,Size/Fit,,exchange,S / White,2026-10-02T12:00:00Z
+900168,#7169,buyer6168@example.com,1200168,Classic Crew Tee,CCT-WHI-S,4400168,28.00,Too Small,Size/Fit,,credit,,2026-10-02T12:00:00Z
+900187,#7188,buyer6187@example.com,1200187,High Rise Straight Jean,HRJ-BLA-30,4400187,89.00,Too Small,Size/Fit,tight across the back,credit,,2026-10-02T12:00:00Z
+900193,#7194,buyer6193@example.com,1200193,High Rise Straight Jean,HRJ-IND-32,4400193,89.00,Too Small,Size/Fit,,credit,,2026-10-02T12:00:00Z
+900200,#7201,buyer6200@example.com,1200200,Ribbed Knit Cardigan,RKC-CRE-L,4400200,95.00,Defective,Quality,,refund,,2026-10-02T12:00:00Z
+900204,#7205,buyer6204@example.com,1200204,High Rise Straight Jean,HRJ-IND-30,4400204,89.00,Too Large,Size/Fit,,refund,,2026-10-02T12:00:00Z
+900208,#7209,buyer6208@example.com,1200208,Classic Crew Tee,CCT-BLA-L,4400208,28.00,Too Small,Size/Fit,,credit,,2026-10-02T12:00:00Z
+900221,#7222,buyer6221@example.com,1200221,Classic Crew Tee,CCT-WHI-S,4400221,28.00,Too Small,Size/Fit,,exchange,M / White,2026-10-02T12:00:00Z
+900223,#7224,buyer6223@example.com,1200223,Linen Wrap Dress,LWD-SAN-S,4400223,120.00,Defective,Quality,,credit,,2026-10-02T12:00:00Z
+900224,#7225,buyer6224@example.com,1200224,High Rise Straight Jean,HRJ-BLA-28,4400224,89.00,Too Small,Size/Fit,,exchange,30 / Black,2026-10-02T12:00:00Z
+900258,#7259,buyer6258@example.com,1200258,High Rise Straight Jean,HRJ-IND-30,4400258,89.00,Too Large,Size/Fit,,exchange,28 / Indigo,2026-10-02T12:00:00Z
+900266,#7267,buyer6266@example.com,1200266,Linen Wrap Dress,LWD-SAN-S,4400266,120.00,Defective,Quality,,refund,,2026-10-02T12:00:00Z
+900267,#7268,buyer6267@example.com,1200267,Ribbed Knit Cardigan,RKC-CRE-XL,4400267,95.00,Too Small,Size/Fit,,credit,,2026-10-02T12:00:00Z
+900268,#7269,buyer6268@example.com,1200268,High Rise Straight Jean,HRJ-IND-30,4400268,89.00,Too Large,Size/Fit,,exchange,28 / Indigo,2026-10-02T12:00:00Z
+900272,#7273,buyer6272@example.com,1200272,Classic Crew Tee,CCT-WHI-XS,4400272,28.00,Too Small,Size/Fit,,credit,,2026-10-02T12:00:00Z
+900277,#7278,buyer6277@example.com,1200277,High Rise Straight Jean,HRJ-BLA-28,4400277,89.00,Too Large,Size/Fit,,credit,,2026-10-02T12:00:00Z
+900298,#7299,buyer6298@example.com,1200298,Classic Crew Tee,CCT-WHI-M,4400298,28.00,Too Small,Size/Fit,,exchange,L / White,2026-10-02T12:00:00Z
+900300,#7301,buyer6300@example.com,1200300,Linen Wrap Dress,LWD-OLI-XS,4400300,120.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+900307,#7308,buyer6307@example.com,1200307,Ribbed Knit Cardigan,RKC-CRE-XL,4400307,95.00,Too Large,Size/Fit,,exchange,L / Cream,2026-10-02T12:00:00Z
+900314,#7315,buyer6314@example.com,1200314,High Rise Straight Jean,HRJ-IND-28,4400314,89.00,Too Large,Size/Fit,,exchange,26 / Indigo,2026-10-02T12:00:00Z
+900320,#7321,buyer6320@example.com,1200320,Classic Crew Tee,CCT-BLA-M,4400320,28.00,Too Small,Size/Fit,,refund,,2026-10-02T12:00:00Z
+900327,#7328,buyer6327@example.com,1200327,Ribbed Knit Cardigan,RKC-CRE-M,4400327,95.00,Not As Pictured,Didn't Like,,refund,,2026-10-02T12:00:00Z
+900338,#7339,buyer6338@example.com,1200338,Ribbed Knit Cardigan,RKC-CRE-XL,4400338,95.00,Too Large,Size/Fit,very roomy,exchange,L / Cream,2026-10-02T12:00:00Z
+900345,#7346,buyer6345@example.com,1200345,Linen Wrap Dress,LWD-OLI-M,4400345,120.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+900352,#7353,buyer6352@example.com,1200352,Canvas Tote,CTB-NAT-OS,4400352,35.00,Not As Pictured,Didn't Like,,refund,,2026-10-02T12:00:00Z
+900359,#7360,buyer6359@example.com,1200359,Ribbed Knit Cardigan,RKC-CRE-S,4400359,95.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+900368,#7369,buyer6368@example.com,1200368,Classic Crew Tee,CCT-WHI-S,4400368,28.00,Defective,Quality,,refund,,2026-10-02T12:00:00Z
+900369,#7370,buyer6369@example.com,1200369,Classic Crew Tee,CCT-WHI-XS,4400369,28.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+900374,#7375,buyer6374@example.com,1200374,High Rise Straight Jean,HRJ-IND-30,4400374,89.00,Too Large,Size/Fit,very roomy,exchange,28 / Indigo,2026-10-02T12:00:00Z
+900399,#7400,buyer6399@example.com,1200399,Linen Wrap Dress,LWD-OLI-S,4400399,120.00,Too Large,Size/Fit,,exchange,XS / Olive,2026-10-02T12:00:00Z
+900411,#7412,buyer6411@example.com,1200411,Classic Crew Tee,CCT-WHI-M,4400411,28.00,Too Small,Size/Fit,,credit,,2026-10-02T12:00:00Z
+900444,#7445,buyer6444@example.com,1200444,High Rise Straight Jean,HRJ-IND-24,4400444,89.00,Defective,Quality,,refund,,2026-10-02T12:00:00Z
+900446,#7447,buyer6446@example.com,1200446,Ribbed Knit Cardigan,RKC-CRE-XL,4400446,95.00,Too Large,Size/Fit,,exchange,L / Cream,2026-10-02T12:00:00Z
+900451,#7452,buyer6451@example.com,1200451,Ribbed Knit Cardigan,RKC-CRE-L,4400451,95.00,Too Small,Size/Fit,,exchange,XL / Cream,2026-10-02T12:00:00Z
+900464,#7465,buyer6464@example.com,1200464,Ribbed Knit Cardigan,RKC-CRE-XL,4400464,95.00,Too Large,Size/Fit,,exchange,L / Cream,2026-10-02T12:00:00Z
+900480,#7481,buyer6480@example.com,1200480,Ribbed Knit Cardigan,RKC-CRE-XL,4400480,95.00,Changed Mind,Didn't Like,,refund,,2026-10-02T12:00:00Z
+900486,#7487,buyer6486@example.com,1200486,Linen Wrap Dress,LWD-SAN-XL,4400486,120.00,Defective,Quality,,credit,,2026-10-02T12:00:00Z
+900503,#7504,buyer6503@example.com,1200503,Classic Crew Tee,CCT-BLA-S,4400503,28.00,Too Small,Size/Fit,tight across the back,credit,,2026-10-02T12:00:00Z
+900522,#7523,buyer6522@example.com,1200522,Linen Wrap Dress,LWD-OLI-L,4400522,120.00,Changed Mind,Didn't Like,,credit,,2026-10-02T12:00:00Z
+900536,#7537,buyer6536@example.com,1200536,High Rise Straight Jean,HRJ-IND-28,4400536,89.00,Changed Mind,Didn't Like,,credit,,2026-10-02T12:00:00Z
+900540,#7541,buyer6540@example.com,1200540,High Rise Straight Jean,HRJ-IND-30,4400540,89.00,Not As Pictured,Didn't Like,,credit,,2026-10-02T12:00:00Z
+900543,#7544,buyer6543@example.com,1200543,Ribbed Knit Cardigan,RKC-CRE-S,4400543,95.00,Not As Pictured,Didn't Like,,credit,,2026-10-02T12:00:00Z
+900548,#7549,buyer6548@example.com,1200548,Classic Crew Tee,CCT-WHI-L,4400548,28.00,Too Small,Size/Fit,tight across the back,credit,,2026-10-02T12:00:00Z
+900549,#7550,buyer6549@example.com,1200549,High Rise Straight Jean,HRJ-IND-28,4400549,89.00,Too Large,Size/Fit,,refund,,2026-10-02T12:00:00Z
+900550,#7551,buyer6550@example.com,1200550,Everyday Hoodie,EDH-GRE-L,4400550,65.00,Changed Mind,Didn't Like,,credit,,2026-10-02T12:00:00Z
+900552,#7553,buyer6552@example.com,1200552,High Rise Straight Jean,HRJ-BLA-26,4400552,89.00,Too Small,Size/Fit,,exchange,28 / Black,2026-10-02T12:00:00Z
+900554,#7555,buyer6554@example.com,1200554,Classic Crew Tee,CCT-BLA-M,4400554,28.00,Too Small,Size/Fit,,exchange,L / Black,2026-10-02T12:00:00Z
+900556,#7557,buyer6556@example.com,1200556,High Rise Straight Jean,HRJ-IND-24,4400556,89.00,Defective,Quality,,refund,,2026-10-02T12:00:00Z
+900564,#7565,buyer6564@example.com,1200564,Linen Wrap Dress,LWD-SAN-L,4400564,120.00,Changed Mind,Didn't Like,,refund,,2026-10-02T12:00:00Z
+900566,#7567,buyer6566@example.com,1200566,Classic Crew Tee,CCT-BLA-S,4400566,28.00,Too Small,Size/Fit,,exchange,M / Black,2026-10-02T12:00:00Z
+900569,#7570,buyer6569@example.com,1200569,High Rise Straight Jean,HRJ-IND-24,4400569,89.00,Other,Other,,credit,,2026-10-02T12:00:00Z
+900574,#7575,buyer6574@example.com,1200574,Classic Crew Tee,CCT-WHI-S,4400574,28.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+900575,#7576,buyer6575@example.com,1200575,High Rise Straight Jean,HRJ-BLA-24,4400575,89.00,Not As Pictured,Didn't Like,,refund,,2026-10-02T12:00:00Z
+900583,#7584,buyer6583@example.com,1200583,High Rise Straight Jean,HRJ-BLA-30,4400583,89.00,Too Large,Size/Fit,very roomy,exchange,28 / Black,2026-10-02T12:00:00Z
+900586,#7587,buyer6586@example.com,1200586,Classic Crew Tee,CCT-WHI-L,4400586,28.00,Too Small,Size/Fit,,exchange,XL / White,2026-10-02T12:00:00Z
+900589,#7590,buyer6589@example.com,1200589,High Rise Straight Jean,HRJ-BLA-28,4400589,89.00,Too Small,Size/Fit,,refund,,2026-10-02T12:00:00Z
+900592,#7593,buyer6592@example.com,1200592,Ribbed Knit Cardigan,RKC-CRE-M,4400592,95.00,Not As Pictured,Didn't Like,,credit,,2026-10-02T12:00:00Z
+900606,#7607,buyer6606@example.com,1200606,Ribbed Knit Cardigan,RKC-CRE-M,4400606,95.00,Not As Pictured,Didn't Like,,credit,,2026-10-02T12:00:00Z
+900610,#7611,buyer6610@example.com,1200610,High Rise Straight Jean,HRJ-IND-24,4400610,89.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+900623,#7624,buyer6623@example.com,1200623,Ribbed Knit Cardigan,RKC-CRE-L,4400623,95.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+900644,#7645,buyer6644@example.com,1200644,Ribbed Knit Cardigan,RKC-CRE-XL,4400644,95.00,Too Large,Size/Fit,,exchange,L / Cream,2026-10-02T12:00:00Z
+900670,#7671,buyer6670@example.com,1200670,Linen Wrap Dress,LWD-SAN-M,4400670,120.00,Changed Mind,Didn't Like,,credit,,2026-10-02T12:00:00Z
+900677,#7678,buyer6677@example.com,1200677,Classic Crew Tee,CCT-WHI-S,4400677,28.00,Too Small,Size/Fit,,refund,,2026-10-02T12:00:00Z
+900701,#7702,buyer6701@example.com,1200701,Ribbed Knit Cardigan,RKC-CRE-S,4400701,95.00,Other,Other,,credit,,2026-10-02T12:00:00Z
+900706,#7707,buyer6706@example.com,1200706,Classic Crew Tee,CCT-WHI-S,4400706,28.00,Too Small,Size/Fit,,exchange,M / White,2026-10-02T12:00:00Z
+900733,#7734,buyer6733@example.com,1200733,High Rise Straight Jean,HRJ-BLA-32,4400733,89.00,Too Large,Size/Fit,very roomy,exchange,30 / Black,2026-10-02T12:00:00Z
+900738,#7739,buyer6738@example.com,1200738,High Rise Straight Jean,HRJ-BLA-26,4400738,89.00,Changed Mind,Didn't Like,,refund,,2026-10-02T12:00:00Z
+900742,#7743,buyer6742@example.com,1200742,High Rise Straight Jean,HRJ-IND-26,4400742,89.00,Other,Other,,credit,,2026-10-02T12:00:00Z
+900747,#7748,buyer6747@example.com,1200747,Classic Crew Tee,CCT-BLA-L,4400747,28.00,Not As Pictured,Didn't Like,,credit,,2026-10-02T12:00:00Z
+900758,#7759,buyer6758@example.com,1200758,Ribbed Knit Cardigan,RKC-CRE-XL,4400758,95.00,Too Large,Size/Fit,,exchange,L / Cream,2026-10-02T12:00:00Z
+900765,#7766,buyer6765@example.com,1200765,High Rise Straight Jean,HRJ-BLA-28,4400765,89.00,Too Large,Size/Fit,,exchange,26 / Black,2026-10-02T12:00:00Z
+900793,#7794,buyer6793@example.com,1200793,High Rise Straight Jean,HRJ-IND-28,4400793,89.00,Too Large,Size/Fit,,exchange,26 / Indigo,2026-10-02T12:00:00Z
+900825,#7826,buyer6825@example.com,1200825,High Rise Straight Jean,HRJ-IND-30,4400825,89.00,Too Large,Size/Fit,,exchange,28 / Indigo,2026-10-02T12:00:00Z
+900830,#7831,buyer6830@example.com,1200830,Classic Crew Tee,CCT-BLA-S,4400830,28.00,Too Small,Size/Fit,,exchange,M / Black,2026-10-02T12:00:00Z
+900834,#7835,buyer6834@example.com,1200834,High Rise Straight Jean,HRJ-BLA-30,4400834,89.00,Too Large,Size/Fit,,refund,,2026-10-02T12:00:00Z
+900850,#7851,buyer6850@example.com,1200850,Classic Crew Tee,CCT-WHI-M,4400850,28.00,Too Small,Size/Fit,,exchange,L / White,2026-10-02T12:00:00Z
+900854,#7855,buyer6854@example.com,1200854,Ribbed Knit Cardigan,RKC-CRE-XL,4400854,95.00,Too Large,Size/Fit,,exchange,L / Cream,2026-10-02T12:00:00Z
+900855,#7856,buyer6855@example.com,1200855,High Rise Straight Jean,HRJ-BLA-30,4400855,89.00,Too Large,Size/Fit,,exchange,28 / Black,2026-10-02T12:00:00Z
+900859,#7860,buyer6859@example.com,1200859,Ribbed Knit Cardigan,RKC-CRE-L,4400859,95.00,Other,Other,,credit,,2026-10-02T12:00:00Z
+900861,#7862,buyer6861@example.com,1200861,High Rise Straight Jean,HRJ-IND-24,4400861,89.00,Not As Pictured,Didn't Like,,refund,,2026-10-02T12:00:00Z
+900864,#7865,buyer6864@example.com,1200864,Classic Crew Tee,CCT-WHI-M,4400864,28.00,Not As Pictured,Didn't Like,,refund,,2026-10-02T12:00:00Z
+900879,#7880,buyer6879@example.com,1200879,Classic Crew Tee,CCT-BLA-M,4400879,28.00,Too Large,Size/Fit,,exchange,S / Black,2026-10-02T12:00:00Z
+900923,#7924,buyer6923@example.com,1200923,Classic Crew Tee,CCT-WHI-S,4400923,28.00,Too Small,Size/Fit,,exchange,M / White,2026-10-02T12:00:00Z
+900932,#7933,buyer6932@example.com,1200932,Linen Wrap Dress,LWD-OLI-M,4400932,120.00,Other,Other,,credit,,2026-10-02T12:00:00Z
+900936,#7937,buyer6936@example.com,1200936,Ribbed Knit Cardigan,RKC-CRE-XL,4400936,95.00,Too Large,Size/Fit,,exchange,L / Cream,2026-10-02T12:00:00Z
+900940,#7941,buyer6940@example.com,1200940,Classic Crew Tee,CCT-WHI-S,4400940,28.00,Too Small,Size/Fit,,exchange,M / White,2026-10-02T12:00:00Z
+900945,#7946,buyer6945@example.com,1200945,Classic Crew Tee,CCT-BLA-M,4400945,28.00,Too Small,Size/Fit,,refund,,2026-10-02T12:00:00Z
+900948,#7949,buyer6948@example.com,1200948,High Rise Straight Jean,HRJ-BLA-30,4400948,89.00,Too Large,Size/Fit,,exchange,28 / Black,2026-10-02T12:00:00Z
+900949,#7950,buyer6949@example.com,1200949,Classic Crew Tee,CCT-WHI-L,4400949,28.00,Too Small,Size/Fit,,exchange,XL / White,2026-10-02T12:00:00Z
+900956,#7957,buyer6956@example.com,1200956,Everyday Hoodie,EDH-GRE-M,4400956,65.00,Too Small,Size/Fit,,exchange,L / Grey,2026-10-02T12:00:00Z
+900958,#7959,buyer6958@example.com,1200958,Classic Crew Tee,CCT-BLA-S,4400958,28.00,Too Small,Size/Fit,,exchange,M / Black,2026-10-02T12:00:00Z
+900979,#7980,buyer6979@example.com,1200979,Classic Crew Tee,CCT-WHI-S,4400979,28.00,Too Small,Size/Fit,tight across the back,refund,,2026-10-02T12:00:00Z
+900987,#7988,buyer6987@example.com,1200987,Ribbed Knit Cardigan,RKC-CRE-XL,4400987,95.00,Too Large,Size/Fit,very roomy,exchange,L / Cream,2026-10-02T12:00:00Z
+900992,#7993,buyer6992@example.com,1200992,Ribbed Knit Cardigan,RKC-CRE-XL,4400992,95.00,Too Large,Size/Fit,,credit,,2026-10-02T12:00:00Z
+900993,#7994,buyer6993@example.com,1200993,High Rise Straight Jean,HRJ-IND-24,4400993,89.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+901008,#8009,buyer7008@example.com,1201008,Classic Crew Tee,CCT-WHI-S,4401008,28.00,Too Small,Size/Fit,,refund,,2026-10-02T12:00:00Z
+901011,#8012,buyer7011@example.com,1201011,High Rise Straight Jean,HRJ-IND-28,4401011,89.00,Not As Pictured,Didn't Like,,refund,,2026-10-02T12:00:00Z
+901012,#8013,buyer7012@example.com,1201012,Classic Crew Tee,CCT-WHI-L,4401012,28.00,Too Small,Size/Fit,,credit,,2026-10-02T12:00:00Z
+901034,#8035,buyer7034@example.com,1201034,Classic Crew Tee,CCT-BLA-S,4401034,28.00,Too Small,Size/Fit,,exchange,M / Black,2026-10-02T12:00:00Z
+901035,#8036,buyer7035@example.com,1201035,Classic Crew Tee,CCT-BLA-S,4401035,28.00,Too Small,Size/Fit,,refund,,2026-10-02T12:00:00Z
+901038,#8039,buyer7038@example.com,1201038,Classic Crew Tee,CCT-BLA-M,4401038,28.00,Defective,Quality,,refund,,2026-10-02T12:00:00Z
+901047,#8048,buyer7047@example.com,1201047,High Rise Straight Jean,HRJ-BLA-24,4401047,89.00,Too Large,Size/Fit,,credit,,2026-10-02T12:00:00Z
+901064,#8065,buyer7064@example.com,1201064,Linen Wrap Dress,LWD-SAN-XL,4401064,120.00,Changed Mind,Didn't Like,,credit,,2026-10-02T12:00:00Z
+901070,#8071,buyer7070@example.com,1201070,Linen Wrap Dress,LWD-OLI-XS,4401070,120.00,Not As Pictured,Didn't Like,,refund,,2026-10-02T12:00:00Z
+901093,#8094,buyer7093@example.com,1201093,High Rise Straight Jean,HRJ-BLA-28,4401093,89.00,Too Large,Size/Fit,,refund,,2026-10-02T12:00:00Z
+901110,#8111,buyer7110@example.com,1201110,High Rise Straight Jean,HRJ-BLA-26,4401110,89.00,Defective,Quality,,credit,,2026-10-02T12:00:00Z
+901117,#8118,buyer7117@example.com,1201117,Ribbed Knit Cardigan,RKC-CRE-L,4401117,95.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+901129,#8130,buyer7129@example.com,1201129,Ribbed Knit Cardigan,RKC-CRE-XL,4401129,95.00,Too Large,Size/Fit,,exchange,L / Cream,2026-10-02T12:00:00Z
+901147,#8148,buyer7147@example.com,1201147,Classic Crew Tee,CCT-WHI-L,4401147,28.00,Too Small,Size/Fit,,credit,,2026-10-02T12:00:00Z
+901165,#8166,buyer7165@example.com,1201165,Classic Crew Tee,CCT-BLA-S,4401165,28.00,Too Small,Size/Fit,tight across the back,exchange,M / Black,2026-10-02T12:00:00Z
+901182,#8183,buyer7182@example.com,1201182,Ribbed Knit Cardigan,RKC-CRE-S,4401182,95.00,Changed Mind,Didn't Like,,credit,,2026-10-02T12:00:00Z
+901193,#8194,buyer7193@example.com,1201193,High Rise Straight Jean,HRJ-IND-28,4401193,89.00,Too Large,Size/Fit,,exchange,26 / Indigo,2026-10-02T12:00:00Z
+901196,#8197,buyer7196@example.com,1201196,High Rise Straight Jean,HRJ-BLA-26,4401196,89.00,Too Large,Size/Fit,,exchange,24 / Black,2026-10-02T12:00:00Z
+901203,#8204,buyer7203@example.com,1201203,High Rise Straight Jean,HRJ-BLA-32,4401203,89.00,Too Large,Size/Fit,,refund,,2026-10-02T12:00:00Z
+901209,#8210,buyer7209@example.com,1201209,High Rise Straight Jean,HRJ-BLA-28,4401209,89.00,Too Large,Size/Fit,,credit,,2026-10-02T12:00:00Z
+901216,#8217,buyer7216@example.com,1201216,Classic Crew Tee,CCT-BLA-M,4401216,28.00,Too Small,Size/Fit,,exchange,L / Black,2026-10-02T12:00:00Z
+901217,#8218,buyer7217@example.com,1201217,Classic Crew Tee,CCT-WHI-M,4401217,28.00,Too Small,Size/Fit,,exchange,L / White,2026-10-02T12:00:00Z
+901218,#8219,buyer7218@example.com,1201218,High Rise Straight Jean,HRJ-IND-30,4401218,89.00,Too Large,Size/Fit,,refund,,2026-10-02T12:00:00Z
+901227,#8228,buyer7227@example.com,1201227,Ribbed Knit Cardigan,RKC-CRE-XL,4401227,95.00,Too Large,Size/Fit,,credit,,2026-10-02T12:00:00Z
+901233,#8234,buyer7233@example.com,1201233,Classic Crew Tee,CCT-WHI-S,4401233,28.00,Changed Mind,Didn't Like,,refund,,2026-10-02T12:00:00Z
+901235,#8236,buyer7235@example.com,1201235,Classic Crew Tee,CCT-WHI-L,4401235,28.00,Other,Other,,credit,,2026-10-02T12:00:00Z
+901237,#8238,buyer7237@example.com,1201237,Ribbed Knit Cardigan,RKC-CRE-XL,4401237,95.00,Too Large,Size/Fit,,credit,,2026-10-02T12:00:00Z
+901254,#8255,buyer7254@example.com,1201254,High Rise Straight Jean,HRJ-IND-26,4401254,89.00,Not As Pictured,Didn't Like,,credit,,2026-10-02T12:00:00Z
+901256,#8257,buyer7256@example.com,1201256,High Rise Straight Jean,HRJ-BLA-26,4401256,89.00,Not As Pictured,Didn't Like,,refund,,2026-10-02T12:00:00Z
+901269,#8270,buyer7269@example.com,1201269,Classic Crew Tee,CCT-WHI-S,4401269,28.00,Too Small,Size/Fit,,exchange,M / White,2026-10-02T12:00:00Z
+901286,#8287,buyer7286@example.com,1201286,High Rise Straight Jean,HRJ-IND-28,4401286,89.00,Too Large,Size/Fit,,refund,,2026-10-02T12:00:00Z
+901297,#8298,buyer7297@example.com,1201297,High Rise Straight Jean,HRJ-IND-28,4401297,89.00,Too Large,Size/Fit,,credit,,2026-10-02T12:00:00Z
+901304,#8305,buyer7304@example.com,1201304,High Rise Straight Jean,HRJ-IND-32,4401304,89.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+901309,#8310,buyer7309@example.com,1201309,Classic Crew Tee,CCT-BLA-S,4401309,28.00,Too Small,Size/Fit,,exchange,M / Black,2026-10-02T12:00:00Z
+901314,#8315,buyer7314@example.com,1201314,High Rise Straight Jean,HRJ-BLA-30,4401314,89.00,Too Large,Size/Fit,very roomy,refund,,2026-10-02T12:00:00Z
+901321,#8322,buyer7321@example.com,1201321,High Rise Straight Jean,HRJ-IND-30,4401321,89.00,Too Large,Size/Fit,very roomy,exchange,28 / Indigo,2026-10-02T12:00:00Z
+901332,#8333,buyer7332@example.com,1201332,Classic Crew Tee,CCT-BLA-S,4401332,28.00,Not As Pictured,Didn't Like,,refund,,2026-10-02T12:00:00Z
+901333,#8334,buyer7333@example.com,1201333,Ribbed Knit Cardigan,RKC-CRE-M,4401333,95.00,Defective,Quality,,refund,,2026-10-02T12:00:00Z
+901334,#8335,buyer7334@example.com,1201334,Everyday Hoodie,EDH-GRE-S,4401334,65.00,Changed Mind,Didn't Like,,credit,,2026-10-02T12:00:00Z
+901339,#8340,buyer7339@example.com,1201339,Linen Wrap Dress,LWD-SAN-XL,4401339,120.00,Other,Other,,credit,,2026-10-02T12:00:00Z
+901346,#8347,buyer7346@example.com,1201346,Ribbed Knit Cardigan,RKC-CRE-L,4401346,95.00,Too Large,Size/Fit,very roomy,credit,,2026-10-02T12:00:00Z
+901351,#8352,buyer7351@example.com,1201351,Ribbed Knit Cardigan,RKC-CRE-XL,4401351,95.00,Too Large,Size/Fit,,refund,,2026-10-02T12:00:00Z
+901376,#8377,buyer7376@example.com,1201376,Ribbed Knit Cardigan,RKC-CRE-L,4401376,95.00,Changed Mind,Didn't Like,,credit,,2026-10-02T12:00:00Z
+901388,#8389,buyer7388@example.com,1201388,Classic Crew Tee,CCT-WHI-L,4401388,28.00,Changed Mind,Didn't Like,,credit,,2026-10-02T12:00:00Z
+901395,#8396,buyer7395@example.com,1201395,High Rise Straight Jean,HRJ-IND-30,4401395,89.00,Too Large,Size/Fit,,exchange,28 / Indigo,2026-10-02T12:00:00Z
+901396,#8397,buyer7396@example.com,1201396,High Rise Straight Jean,HRJ-BLA-28,4401396,89.00,Too Large,Size/Fit,,exchange,26 / Black,2026-10-02T12:00:00Z
+901403,#8404,buyer7403@example.com,1201403,Classic Crew Tee,CCT-WHI-M,4401403,28.00,Too Small,Size/Fit,tight across the back,exchange,L / White,2026-10-02T12:00:00Z
+901406,#8407,buyer7406@example.com,1201406,Classic Crew Tee,CCT-WHI-M,4401406,28.00,Too Small,Size/Fit,,exchange,L / White,2026-10-02T12:00:00Z
+901418,#8419,buyer7418@example.com,1201418,Classic Crew Tee,CCT-WHI-M,4401418,28.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+901430,#8431,buyer7430@example.com,1201430,High Rise Straight Jean,HRJ-BLA-26,4401430,89.00,Too Large,Size/Fit,,refund,,2026-10-02T12:00:00Z
+901433,#8434,buyer7433@example.com,1201433,High Rise Straight Jean,HRJ-BLA-28,4401433,89.00,Too Large,Size/Fit,,credit,,2026-10-02T12:00:00Z
+901444,#8445,buyer7444@example.com,1201444,High Rise Straight Jean,HRJ-BLA-32,4401444,89.00,Other,Other,,credit,,2026-10-02T12:00:00Z
+901446,#8447,buyer7446@example.com,1201446,High Rise Straight Jean,HRJ-IND-30,4401446,89.00,Too Large,Size/Fit,,exchange,28 / Indigo,2026-10-02T12:00:00Z
+901485,#8486,buyer7485@example.com,1201485,Classic Crew Tee,CCT-WHI-M,4401485,28.00,Too Small,Size/Fit,,exchange,L / White,2026-10-02T12:00:00Z
+901495,#8496,buyer7495@example.com,1201495,High Rise Straight Jean,HRJ-IND-28,4401495,89.00,Too Large,Size/Fit,,exchange,26 / Indigo,2026-10-02T12:00:00Z
+901497,#8498,buyer7497@example.com,1201497,High Rise Straight Jean,HRJ-IND-30,4401497,89.00,Too Large,Size/Fit,,exchange,28 / Indigo,2026-10-02T12:00:00Z
+901510,#8511,buyer7510@example.com,1201510,High Rise Straight Jean,HRJ-IND-30,4401510,89.00,Too Large,Size/Fit,,exchange,28 / Indigo,2026-10-02T12:00:00Z
+901516,#8517,buyer7516@example.com,1201516,High Rise Straight Jean,HRJ-IND-26,4401516,89.00,Too Large,Size/Fit,,credit,,2026-10-02T12:00:00Z
+901517,#8518,buyer7517@example.com,1201517,Classic Crew Tee,CCT-BLA-L,4401517,28.00,Too Small,Size/Fit,,exchange,XL / Black,2026-10-02T12:00:00Z
+901522,#8523,buyer7522@example.com,1201522,Ribbed Knit Cardigan,RKC-CRE-XL,4401522,95.00,Too Large,Size/Fit,,credit,,2026-10-02T12:00:00Z
+901530,#8531,buyer7530@example.com,1201530,Classic Crew Tee,CCT-BLA-S,4401530,28.00,Too Small,Size/Fit,,exchange,M / Black,2026-10-02T12:00:00Z
+901534,#8535,buyer7534@example.com,1201534,Classic Crew Tee,CCT-WHI-L,4401534,28.00,Too Small,Size/Fit,,credit,,2026-10-02T12:00:00Z
+901536,#8537,buyer7536@example.com,1201536,Ribbed Knit Cardigan,RKC-CRE-XL,4401536,95.00,Defective,Quality,,credit,,2026-10-02T12:00:00Z
+901545,#8546,buyer7545@example.com,1201545,Classic Crew Tee,CCT-BLA-S,4401545,28.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+901558,#8559,buyer7558@example.com,1201558,Ribbed Knit Cardigan,RKC-CRE-L,4401558,95.00,Not As Pictured,Didn't Like,,refund,,2026-10-02T12:00:00Z
+901560,#8561,buyer7560@example.com,1201560,Everyday Hoodie,EDH-GRE-L,4401560,65.00,Changed Mind,Didn't Like,,refund,,2026-10-02T12:00:00Z
+901564,#8565,buyer7564@example.com,1201564,Classic Crew Tee,CCT-WHI-S,4401564,28.00,Too Small,Size/Fit,,exchange,M / White,2026-10-02T12:00:00Z
+901576,#8577,buyer7576@example.com,1201576,Linen Wrap Dress,LWD-SAN-L,4401576,120.00,Not As Pictured,Didn't Like,,refund,,2026-10-02T12:00:00Z
+901578,#8579,buyer7578@example.com,1201578,Ribbed Knit Cardigan,RKC-CRE-XL,4401578,95.00,Too Large,Size/Fit,very roomy,exchange,L / Cream,2026-10-02T12:00:00Z
+901579,#8580,buyer7579@example.com,1201579,High Rise Straight Jean,HRJ-IND-32,4401579,89.00,Too Large,Size/Fit,,exchange,30 / Indigo,2026-10-02T12:00:00Z
+901611,#8612,buyer7611@example.com,1201611,Linen Wrap Dress,LWD-OLI-M,4401611,120.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+901624,#8625,buyer7624@example.com,1201624,Classic Crew Tee,CCT-WHI-S,4401624,28.00,Defective,Quality,,refund,,2026-10-02T12:00:00Z
+901643,#8644,buyer7643@example.com,1201643,Ribbed Knit Cardigan,RKC-CRE-S,4401643,95.00,Too Large,Size/Fit,very roomy,refund,,2026-10-02T12:00:00Z
+901644,#8645,buyer7644@example.com,1201644,Linen Wrap Dress,LWD-SAN-XS,4401644,120.00,Too Large,Size/Fit,,refund,,2026-10-02T12:00:00Z
+901651,#8652,buyer7651@example.com,1201651,High Rise Straight Jean,HRJ-IND-28,4401651,89.00,Too Large,Size/Fit,,exchange,26 / Indigo,2026-10-02T12:00:00Z
+901687,#8688,buyer7687@example.com,1201687,High Rise Straight Jean,HRJ-BLA-28,4401687,89.00,Too Large,Size/Fit,very roomy,refund,,2026-10-02T12:00:00Z
+901688,#8689,buyer7688@example.com,1201688,Classic Crew Tee,CCT-BLA-L,4401688,28.00,Too Small,Size/Fit,tight across the back,exchange,XL / Black,2026-10-02T12:00:00Z
+901693,#8694,buyer7693@example.com,1201693,High Rise Straight Jean,HRJ-BLA-30,4401693,89.00,Too Large,Size/Fit,very roomy,exchange,28 / Black,2026-10-02T12:00:00Z
+901721,#8722,buyer7721@example.com,1201721,High Rise Straight Jean,HRJ-BLA-28,4401721,89.00,Too Large,Size/Fit,,exchange,26 / Black,2026-10-02T12:00:00Z
+901723,#8724,buyer7723@example.com,1201723,High Rise Straight Jean,HRJ-IND-32,4401723,89.00,Defective,Quality,,credit,,2026-10-02T12:00:00Z
+901733,#8734,buyer7733@example.com,1201733,Ribbed Knit Cardigan,RKC-CRE-XL,4401733,95.00,Too Large,Size/Fit,,exchange,L / Cream,2026-10-02T12:00:00Z
+901739,#8740,buyer7739@example.com,1201739,High Rise Straight Jean,HRJ-IND-28,4401739,89.00,Too Large,Size/Fit,very roomy,credit,,2026-10-02T12:00:00Z
+901756,#8757,buyer7756@example.com,1201756,Ribbed Knit Cardigan,RKC-CRE-XL,4401756,95.00,Not As Pictured,Didn't Like,,refund,,2026-10-02T12:00:00Z
+901766,#8767,buyer7766@example.com,1201766,Classic Crew Tee,CCT-WHI-L,4401766,28.00,Too Small,Size/Fit,,exchange,XL / White,2026-10-02T12:00:00Z
+901767,#8768,buyer7767@example.com,1201767,Classic Crew Tee,CCT-WHI-S,4401767,28.00,Too Small,Size/Fit,,exchange,M / White,2026-10-02T12:00:00Z
+901770,#8771,buyer7770@example.com,1201770,High Rise Straight Jean,HRJ-IND-30,4401770,89.00,Too Large,Size/Fit,,refund,,2026-10-02T12:00:00Z
+901774,#8775,buyer7774@example.com,1201774,Ribbed Knit Cardigan,RKC-CRE-XL,4401774,95.00,Too Large,Size/Fit,,exchange,L / Cream,2026-10-02T12:00:00Z
+901786,#8787,buyer7786@example.com,1201786,Classic Crew Tee,CCT-BLA-S,4401786,28.00,Too Small,Size/Fit,,credit,,2026-10-02T12:00:00Z
+901800,#8801,buyer7800@example.com,1201800,Classic Crew Tee,CCT-BLA-M,4401800,28.00,Too Small,Size/Fit,,credit,,2026-10-02T12:00:00Z
+901837,#8838,buyer7837@example.com,1201837,Ribbed Knit Cardigan,RKC-CRE-XL,4401837,95.00,Too Large,Size/Fit,,exchange,L / Cream,2026-10-02T12:00:00Z
+901856,#8857,buyer7856@example.com,1201856,Ribbed Knit Cardigan,RKC-CRE-XL,4401856,95.00,Too Large,Size/Fit,,exchange,L / Cream,2026-10-02T12:00:00Z
+901882,#8883,buyer7882@example.com,1201882,Classic Crew Tee,CCT-WHI-L,4401882,28.00,Too Small,Size/Fit,,exchange,XL / White,2026-10-02T12:00:00Z
+901883,#8884,buyer7883@example.com,1201883,Linen Wrap Dress,LWD-SAN-XL,4401883,120.00,Defective,Quality,,credit,,2026-10-02T12:00:00Z
+901901,#8902,buyer7901@example.com,1201901,High Rise Straight Jean,HRJ-BLA-26,4401901,89.00,Defective,Quality,,refund,,2026-10-02T12:00:00Z
+901904,#8905,buyer7904@example.com,1201904,Linen Wrap Dress,LWD-SAN-S,4401904,120.00,Not As Pictured,Didn't Like,,credit,,2026-10-02T12:00:00Z
+901915,#8916,buyer7915@example.com,1201915,Linen Wrap Dress,LWD-OLI-XL,4401915,120.00,Too Large,Size/Fit,very roomy,exchange,L / Olive,2026-10-02T12:00:00Z
+901920,#8921,buyer7920@example.com,1201920,Classic Crew Tee,CCT-WHI-XXL,4401920,28.00,Too Large,Size/Fit,,exchange,XL / White,2026-10-02T12:00:00Z
+901921,#8922,buyer7921@example.com,1201921,Classic Crew Tee,CCT-BLA-S,4401921,28.00,Too Small,Size/Fit,,credit,,2026-10-02T12:00:00Z
+901930,#8931,buyer7930@example.com,1201930,Classic Crew Tee,CCT-BLA-L,4401930,28.00,Too Small,Size/Fit,tight across the back,refund,,2026-10-02T12:00:00Z
+901954,#8955,buyer7954@example.com,1201954,High Rise Straight Jean,HRJ-BLA-30,4401954,89.00,Too Large,Size/Fit,very roomy,exchange,28 / Black,2026-10-02T12:00:00Z
+901960,#8961,buyer7960@example.com,1201960,High Rise Straight Jean,HRJ-BLA-32,4401960,89.00,Too Small,Size/Fit,,refund,,2026-10-02T12:00:00Z
+901961,#8962,buyer7961@example.com,1201961,High Rise Straight Jean,HRJ-BLA-28,4401961,89.00,Too Large,Size/Fit,,exchange,26 / Black,2026-10-02T12:00:00Z
+901975,#8976,buyer7975@example.com,1201975,High Rise Straight Jean,HRJ-IND-30,4401975,89.00,Other,Other,,credit,,2026-10-02T12:00:00Z
+901981,#8982,buyer7981@example.com,1201981,High Rise Straight Jean,HRJ-IND-24,4401981,89.00,Too Small,Size/Fit,tight across the back,exchange,26 / Indigo,2026-10-02T12:00:00Z
+901983,#8984,buyer7983@example.com,1201983,Linen Wrap Dress,LWD-OLI-XL,4401983,120.00,Changed Mind,Didn't Like,,credit,,2026-10-02T12:00:00Z
+901986,#8987,buyer7986@example.com,1201986,High Rise Straight Jean,HRJ-IND-28,4401986,89.00,Changed Mind,Didn't Like,,credit,,2026-10-02T12:00:00Z
+901988,#8989,buyer7988@example.com,1201988,Classic Crew Tee,CCT-BLA-S,4401988,28.00,Too Large,Size/Fit,very roomy,exchange,XS / Black,2026-10-02T12:00:00Z
+901995,#8996,buyer7995@example.com,1201995,Classic Crew Tee,CCT-WHI-S,4401995,28.00,Too Small,Size/Fit,,exchange,M / White,2026-10-02T12:00:00Z
+902009,#9010,buyer8009@example.com,1202009,Classic Crew Tee,CCT-WHI-S,4402009,28.00,Too Small,Size/Fit,,refund,,2026-10-02T12:00:00Z
+902010,#9011,buyer8010@example.com,1202010,Linen Wrap Dress,LWD-OLI-S,4402010,120.00,Other,Other,,credit,,2026-10-02T12:00:00Z
+902020,#9021,buyer8020@example.com,1202020,Classic Crew Tee,CCT-WHI-L,4402020,28.00,Too Small,Size/Fit,tight across the back,exchange,XL / White,2026-10-02T12:00:00Z
+902031,#9032,buyer8031@example.com,1202031,High Rise Straight Jean,HRJ-IND-24,4402031,89.00,Too Large,Size/Fit,very roomy,refund,,2026-10-02T12:00:00Z
+902050,#9051,buyer8050@example.com,1202050,Classic Crew Tee,CCT-WHI-M,4402050,28.00,Too Large,Size/Fit,very roomy,exchange,S / White,2026-10-02T12:00:00Z
+902052,#9053,buyer8052@example.com,1202052,Ribbed Knit Cardigan,RKC-CRE-L,4402052,95.00,Changed Mind,Didn't Like,,refund,,2026-10-02T12:00:00Z
+902057,#9058,buyer8057@example.com,1202057,High Rise Straight Jean,HRJ-BLA-30,4402057,89.00,Too Large,Size/Fit,,exchange,28 / Black,2026-10-02T12:00:00Z
+902066,#9067,buyer8066@example.com,1202066,Ribbed Knit Cardigan,RKC-CRE-S,4402066,95.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+902072,#9073,buyer8072@example.com,1202072,Ribbed Knit Cardigan,RKC-CRE-XL,4402072,95.00,Too Large,Size/Fit,,exchange,L / Cream,2026-10-02T12:00:00Z
+902085,#9086,buyer8085@example.com,1202085,Linen Wrap Dress,LWD-SAN-XL,4402085,120.00,Other,Other,,credit,,2026-10-02T12:00:00Z
+902086,#9087,buyer8086@example.com,1202086,Everyday Hoodie,EDH-GRE-XL,4402086,65.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+902106,#9107,buyer8106@example.com,1202106,High Rise Straight Jean,HRJ-BLA-30,4402106,89.00,Too Large,Size/Fit,,exchange,28 / Black,2026-10-02T12:00:00Z
+902108,#9109,buyer8108@example.com,1202108,Ribbed Knit Cardigan,RKC-CRE-XL,4402108,95.00,Too Large,Size/Fit,,refund,,2026-10-02T12:00:00Z
+902114,#9115,buyer8114@example.com,1202114,Classic Crew Tee,CCT-WHI-M,4402114,28.00,Changed Mind,Didn't Like,,refund,,2026-10-02T12:00:00Z
+902116,#9117,buyer8116@example.com,1202116,Ribbed Knit Cardigan,RKC-CRE-M,4402116,95.00,Changed Mind,Didn't Like,,refund,,2026-10-02T12:00:00Z
+902117,#9118,buyer8117@example.com,1202117,Everyday Hoodie,EDH-GRE-XL,4402117,65.00,Too Small,Size/Fit,,credit,,2026-10-02T12:00:00Z
+902125,#9126,buyer8125@example.com,1202125,High Rise Straight Jean,HRJ-IND-28,4402125,89.00,Too Small,Size/Fit,,exchange,30 / Indigo,2026-10-02T12:00:00Z
+902146,#9147,buyer8146@example.com,1202146,Ribbed Knit Cardigan,RKC-CRE-XL,4402146,95.00,Too Large,Size/Fit,,exchange,L / Cream,2026-10-02T12:00:00Z
+902186,#9187,buyer8186@example.com,1202186,Classic Crew Tee,CCT-BLA-S,4402186,28.00,Too Large,Size/Fit,,credit,,2026-10-02T12:00:00Z
+902194,#9195,buyer8194@example.com,1202194,Ribbed Knit Cardigan,RKC-CRE-S,4402194,95.00,Too Large,Size/Fit,,credit,,2026-10-02T12:00:00Z
+902205,#9206,buyer8205@example.com,1202205,Classic Crew Tee,CCT-WHI-M,4402205,28.00,Too Large,Size/Fit,,refund,,2026-10-02T12:00:00Z
+902207,#9208,buyer8207@example.com,1202207,Linen Wrap Dress,LWD-OLI-XL,4402207,120.00,Not As Pictured,Didn't Like,,refund,,2026-10-02T12:00:00Z
+902219,#9220,buyer8219@example.com,1202219,Ribbed Knit Cardigan,RKC-CRE-XL,4402219,95.00,Other,Other,,credit,,2026-10-02T12:00:00Z
+902248,#9249,buyer8248@example.com,1202248,Classic Crew Tee,CCT-BLA-S,4402248,28.00,Too Small,Size/Fit,tight across the back,exchange,M / Black,2026-10-02T12:00:00Z
+902251,#9252,buyer8251@example.com,1202251,Ribbed Knit Cardigan,RKC-CRE-M,4402251,95.00,Changed Mind,Didn't Like,,refund,,2026-10-02T12:00:00Z
+902254,#9255,buyer8254@example.com,1202254,High Rise Straight Jean,HRJ-IND-30,4402254,89.00,Too Large,Size/Fit,,exchange,28 / Indigo,2026-10-02T12:00:00Z
+902257,#9258,buyer8257@example.com,1202257,Linen Wrap Dress,LWD-SAN-XS,4402257,120.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+902259,#9260,buyer8259@example.com,1202259,High Rise Straight Jean,HRJ-BLA-26,4402259,89.00,Not As Pictured,Didn't Like,,credit,,2026-10-02T12:00:00Z
+902263,#9264,buyer8263@example.com,1202263,Classic Crew Tee,CCT-BLA-S,4402263,28.00,Too Small,Size/Fit,,refund,,2026-10-02T12:00:00Z
+902278,#9279,buyer8278@example.com,1202278,Ribbed Knit Cardigan,RKC-CRE-XL,4402278,95.00,Too Large,Size/Fit,very roomy,exchange,L / Cream,2026-10-02T12:00:00Z
+902280,#9281,buyer8280@example.com,1202280,Ribbed Knit Cardigan,RKC-CRE-XL,4402280,95.00,Too Large,Size/Fit,,exchange,L / Cream,2026-10-02T12:00:00Z
+902308,#9309,buyer8308@example.com,1202308,Linen Wrap Dress,LWD-SAN-M,4402308,120.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+902313,#9314,buyer8313@example.com,1202313,High Rise Straight Jean,HRJ-IND-28,4402313,89.00,Too Large,Size/Fit,,refund,,2026-10-02T12:00:00Z
+902340,#9341,buyer8340@example.com,1202340,Ribbed Knit Cardigan,RKC-CRE-L,4402340,95.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+902352,#9353,buyer8352@example.com,1202352,Ribbed Knit Cardigan,RKC-CRE-XL,4402352,95.00,Too Large,Size/Fit,very roomy,exchange,L / Cream,2026-10-02T12:00:00Z
+902366,#9367,buyer8366@example.com,1202366,Classic Crew Tee,CCT-BLA-XXL,4402366,28.00,Not As Pictured,Didn't Like,,credit,,2026-10-02T12:00:00Z
+902368,#9369,buyer8368@example.com,1202368,Classic Crew Tee,CCT-BLA-S,4402368,28.00,Not As Pictured,Didn't Like,,refund,,2026-10-02T12:00:00Z
+902370,#9371,buyer8370@example.com,1202370,High Rise Straight Jean,HRJ-BLA-32,4402370,89.00,Defective,Quality,,credit,,2026-10-02T12:00:00Z
+902373,#9374,buyer8373@example.com,1202373,High Rise Straight Jean,HRJ-BLA-28,4402373,89.00,Too Large,Size/Fit,,refund,,2026-10-02T12:00:00Z
+902378,#9379,buyer8378@example.com,1202378,Classic Crew Tee,CCT-BLA-XS,4402378,28.00,Not As Pictured,Didn't Like,,credit,,2026-10-02T12:00:00Z
+902383,#9384,buyer8383@example.com,1202383,High Rise Straight Jean,HRJ-BLA-28,4402383,89.00,Defective,Quality,,refund,,2026-10-02T12:00:00Z
+902384,#9385,buyer8384@example.com,1202384,Ribbed Knit Cardigan,RKC-CRE-S,4402384,95.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+902389,#9390,buyer8389@example.com,1202389,High Rise Straight Jean,HRJ-IND-26,4402389,89.00,Too Large,Size/Fit,,exchange,24 / Indigo,2026-10-02T12:00:00Z
+902397,#9398,buyer8397@example.com,1202397,Ribbed Knit Cardigan,RKC-CRE-S,4402397,95.00,Changed Mind,Didn't Like,,credit,,2026-10-02T12:00:00Z
+902401,#9402,buyer8401@example.com,1202401,Classic Crew Tee,CCT-BLA-M,4402401,28.00,Too Small,Size/Fit,tight across the back,exchange,L / Black,2026-10-02T12:00:00Z
+902411,#9412,buyer8411@example.com,1202411,Everyday Hoodie,EDH-GRE-M,4402411,65.00,Too Small,Size/Fit,tight across the back,exchange,L / Grey,2026-10-02T12:00:00Z
+902415,#9416,buyer8415@example.com,1202415,High Rise Straight Jean,HRJ-BLA-32,4402415,89.00,Defective,Quality,,refund,,2026-10-02T12:00:00Z
+902432,#9433,buyer8432@example.com,1202432,High Rise Straight Jean,HRJ-BLA-28,4402432,89.00,Too Large,Size/Fit,,refund,,2026-10-02T12:00:00Z
+902436,#9437,buyer8436@example.com,1202436,High Rise Straight Jean,HRJ-IND-30,4402436,89.00,Too Small,Size/Fit,,exchange,32 / Indigo,2026-10-02T12:00:00Z
+902447,#9448,buyer8447@example.com,1202447,High Rise Straight Jean,HRJ-IND-32,4402447,89.00,Changed Mind,Didn't Like,,credit,,2026-10-02T12:00:00Z
+902457,#9458,buyer8457@example.com,1202457,High Rise Straight Jean,HRJ-BLA-30,4402457,89.00,Too Small,Size/Fit,tight across the back,refund,,2026-10-02T12:00:00Z
+902460,#9461,buyer8460@example.com,1202460,Classic Crew Tee,CCT-BLA-S,4402460,28.00,Not As Pictured,Didn't Like,,credit,,2026-10-02T12:00:00Z
+902463,#9464,buyer8463@example.com,1202463,Ribbed Knit Cardigan,RKC-CRE-S,4402463,95.00,Other,Other,,credit,,2026-10-02T12:00:00Z
+902465,#9466,buyer8465@example.com,1202465,Ribbed Knit Cardigan,RKC-CRE-XL,4402465,95.00,Too Large,Size/Fit,,exchange,L / Cream,2026-10-02T12:00:00Z
+902468,#9469,buyer8468@example.com,1202468,Classic Crew Tee,CCT-BLA-M,4402468,28.00,Too Small,Size/Fit,,exchange,L / Black,2026-10-02T12:00:00Z
+902485,#9486,buyer8485@example.com,1202485,Classic Crew Tee,CCT-BLA-S,4402485,28.00,Too Small,Size/Fit,,refund,,2026-10-02T12:00:00Z
+902487,#9488,buyer8487@example.com,1202487,High Rise Straight Jean,HRJ-BLA-26,4402487,89.00,Defective,Quality,,refund,,2026-10-02T12:00:00Z
+902504,#9505,buyer8504@example.com,1202504,High Rise Straight Jean,HRJ-IND-32,4402504,89.00,Changed Mind,Didn't Like,,credit,,2026-10-02T12:00:00Z
+902514,#9515,buyer8514@example.com,1202514,Linen Wrap Dress,LWD-SAN-S,4402514,120.00,Too Large,Size/Fit,,exchange,XS / Sand,2026-10-02T12:00:00Z
+902532,#9533,buyer8532@example.com,1202532,Linen Wrap Dress,LWD-SAN-M,4402532,120.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+902551,#9552,buyer8551@example.com,1202551,Ribbed Knit Cardigan,RKC-CRE-XL,4402551,95.00,Too Large,Size/Fit,very roomy,credit,,2026-10-02T12:00:00Z
+902566,#9567,buyer8566@example.com,1202566,Classic Crew Tee,CCT-WHI-XL,4402566,28.00,Too Small,Size/Fit,tight across the back,exchange,XXL / White,2026-10-02T12:00:00Z
+902575,#9576,buyer8575@example.com,1202575,Linen Wrap Dress,LWD-SAN-XL,4402575,120.00,Defective,Quality,,credit,,2026-10-02T12:00:00Z
+902580,#9581,buyer8580@example.com,1202580,High Rise Straight Jean,HRJ-BLA-32,4402580,89.00,Defective,Quality,,refund,,2026-10-02T12:00:00Z
+902586,#9587,buyer8586@example.com,1202586,Canvas Tote,CTB-NAT-OS,4402586,35.00,Not As Pictured,Didn't Like,,refund,,2026-10-02T12:00:00Z
+902590,#9591,buyer8590@example.com,1202590,Classic Crew Tee,CCT-WHI-XS,4402590,28.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+902608,#9609,buyer8608@example.com,1202608,High Rise Straight Jean,HRJ-BLA-30,4402608,89.00,Too Large,Size/Fit,,credit,,2026-10-02T12:00:00Z
+902612,#9613,buyer8612@example.com,1202612,Ribbed Knit Cardigan,RKC-CRE-L,4402612,95.00,Changed Mind,Didn't Like,,credit,,2026-10-02T12:00:00Z
+902618,#9619,buyer8618@example.com,1202618,Ribbed Knit Cardigan,RKC-CRE-XL,4402618,95.00,Too Large,Size/Fit,,exchange,L / Cream,2026-10-02T12:00:00Z
+902638,#9639,buyer8638@example.com,1202638,High Rise Straight Jean,HRJ-IND-28,4402638,89.00,Too Large,Size/Fit,,exchange,26 / Indigo,2026-10-02T12:00:00Z
+902640,#9641,buyer8640@example.com,1202640,Everyday Hoodie,EDH-GRE-S,4402640,65.00,Too Small,Size/Fit,,exchange,M / Grey,2026-10-02T12:00:00Z
+902650,#9651,buyer8650@example.com,1202650,High Rise Straight Jean,HRJ-BLA-28,4402650,89.00,Too Large,Size/Fit,,credit,,2026-10-02T12:00:00Z
+902660,#9661,buyer8660@example.com,1202660,High Rise Straight Jean,HRJ-IND-26,4402660,89.00,Defective,Quality,,credit,,2026-10-02T12:00:00Z
+902663,#9664,buyer8663@example.com,1202663,Everyday Hoodie,EDH-GRE-S,4402663,65.00,Too Large,Size/Fit,,credit,,2026-10-02T12:00:00Z
+902680,#9681,buyer8680@example.com,1202680,Classic Crew Tee,CCT-WHI-XL,4402680,28.00,Too Large,Size/Fit,very roomy,exchange,L / White,2026-10-02T12:00:00Z
+902696,#9697,buyer8696@example.com,1202696,Classic Crew Tee,CCT-BLA-XL,4402696,28.00,Too Small,Size/Fit,,exchange,XXL / Black,2026-10-02T12:00:00Z
+902730,#9731,buyer8730@example.com,1202730,Ribbed Knit Cardigan,RKC-CRE-XL,4402730,95.00,Defective,Quality,,credit,,2026-10-02T12:00:00Z
+902734,#9735,buyer8734@example.com,1202734,Classic Crew Tee,CCT-BLA-L,4402734,28.00,Too Small,Size/Fit,,credit,,2026-10-02T12:00:00Z
+902736,#9737,buyer8736@example.com,1202736,High Rise Straight Jean,HRJ-IND-30,4402736,89.00,Too Large,Size/Fit,,credit,,2026-10-02T12:00:00Z
+902746,#9747,buyer8746@example.com,1202746,Classic Crew Tee,CCT-BLA-S,4402746,28.00,Too Small,Size/Fit,,refund,,2026-10-02T12:00:00Z
+902750,#9751,buyer8750@example.com,1202750,Classic Crew Tee,CCT-WHI-S,4402750,28.00,Too Small,Size/Fit,,credit,,2026-10-02T12:00:00Z
+902762,#9763,buyer8762@example.com,1202762,Classic Crew Tee,CCT-BLA-XS,4402762,28.00,Too Small,Size/Fit,,exchange,S / Black,2026-10-02T12:00:00Z
+902776,#9777,buyer8776@example.com,1202776,High Rise Straight Jean,HRJ-BLA-32,4402776,89.00,Defective,Quality,,credit,,2026-10-02T12:00:00Z
+902778,#9779,buyer8778@example.com,1202778,Classic Crew Tee,CCT-BLA-M,4402778,28.00,Too Small,Size/Fit,,refund,,2026-10-02T12:00:00Z
+902781,#9782,buyer8781@example.com,1202781,Ribbed Knit Cardigan,RKC-CRE-XL,4402781,95.00,Too Large,Size/Fit,,exchange,L / Cream,2026-10-02T12:00:00Z
+902788,#9789,buyer8788@example.com,1202788,High Rise Straight Jean,HRJ-BLA-28,4402788,89.00,Too Small,Size/Fit,tight across the back,exchange,30 / Black,2026-10-02T12:00:00Z
+902803,#9804,buyer8803@example.com,1202803,Classic Crew Tee,CCT-WHI-XS,4402803,28.00,Too Small,Size/Fit,,refund,,2026-10-02T12:00:00Z
+902820,#9821,buyer8820@example.com,1202820,Classic Crew Tee,CCT-WHI-XS,4402820,28.00,Too Large,Size/Fit,very roomy,refund,,2026-10-02T12:00:00Z
+902826,#9827,buyer8826@example.com,1202826,Ribbed Knit Cardigan,RKC-CRE-S,4402826,95.00,Too Small,Size/Fit,,exchange,M / Cream,2026-10-02T12:00:00Z
+902828,#9829,buyer8828@example.com,1202828,Ribbed Knit Cardigan,RKC-CRE-XL,4402828,95.00,Defective,Quality,,credit,,2026-10-02T12:00:00Z
+902829,#9830,buyer8829@example.com,1202829,Linen Wrap Dress,LWD-SAN-M,4402829,120.00,Defective,Quality,,refund,,2026-10-02T12:00:00Z
+902835,#9836,buyer8835@example.com,1202835,Everyday Hoodie,EDH-GRE-XL,4402835,65.00,Too Small,Size/Fit,,refund,,2026-10-02T12:00:00Z
+902837,#9838,buyer8837@example.com,1202837,Classic Crew Tee,CCT-BLA-S,4402837,28.00,Not As Pictured,Didn't Like,,refund,,2026-10-02T12:00:00Z
+902847,#9848,buyer8847@example.com,1202847,High Rise Straight Jean,HRJ-IND-28,4402847,89.00,Defective,Quality,,credit,,2026-10-02T12:00:00Z
+902868,#9869,buyer8868@example.com,1202868,Classic Crew Tee,CCT-BLA-XS,4402868,28.00,Too Small,Size/Fit,tight across the back,credit,,2026-10-02T12:00:00Z
+902874,#9875,buyer8874@example.com,1202874,High Rise Straight Jean,HRJ-BLA-28,4402874,89.00,Not As Pictured,Didn't Like,,credit,,2026-10-02T12:00:00Z
+902876,#9877,buyer8876@example.com,1202876,High Rise Straight Jean,HRJ-BLA-32,4402876,89.00,Too Large,Size/Fit,,exchange,30 / Black,2026-10-02T12:00:00Z
+902878,#9879,buyer8878@example.com,1202878,Classic Crew Tee,CCT-WHI-L,4402878,28.00,Too Small,Size/Fit,tight across the back,exchange,XL / White,2026-10-02T12:00:00Z
+902895,#9896,buyer8895@example.com,1202895,Classic Crew Tee,CCT-BLA-XXL,4402895,28.00,Too Large,Size/Fit,,exchange,XL / Black,2026-10-02T12:00:00Z
+902907,#9908,buyer8907@example.com,1202907,Classic Crew Tee,CCT-BLA-XS,4402907,28.00,Changed Mind,Didn't Like,,refund,,2026-10-02T12:00:00Z
+902931,#9932,buyer8931@example.com,1202931,High Rise Straight Jean,HRJ-BLA-32,4402931,89.00,Too Small,Size/Fit,,credit,,2026-10-02T12:00:00Z
+902934,#9935,buyer8934@example.com,1202934,Everyday Hoodie,EDH-GRE-L,4402934,65.00,Too Large,Size/Fit,,exchange,M / Grey,2026-10-02T12:00:00Z
+902940,#9941,buyer8940@example.com,1202940,Classic Crew Tee,CCT-BLA-L,4402940,28.00,Other,Other,,refund,,2026-10-02T12:00:00Z
+902948,#9949,buyer8948@example.com,1202948,High Rise Straight Jean,HRJ-IND-26,4402948,89.00,Too Small,Size/Fit,,exchange,28 / Indigo,2026-10-02T12:00:00Z
+902989,#9990,buyer8989@example.com,1202989,Classic Crew Tee,CCT-WHI-XS,4402989,28.00,Not As Pictured,Didn't Like,,credit,,2026-10-02T12:00:00Z
+902995,#9996,buyer8995@example.com,1202995,Ribbed Knit Cardigan,RKC-CRE-M,4402995,95.00,Too Large,Size/Fit,,exchange,S / Cream,2026-10-02T12:00:00Z

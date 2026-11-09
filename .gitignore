@@ -1,0 +1,4 @@
+.claude/
+node_modules/
+report.html
+.DS_Store

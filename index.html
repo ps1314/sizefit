@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SizeFit · 尺码偏差分析</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%231f4fd1'/><path d='M8 22h16M8 16h11M8 10h6' stroke='white' stroke-width='3' stroke-linecap='round'/></svg>">
+<style>
+:root{--ink:#1d2330;--muted:#5d6675;--line:#e3e6eb;--card:#fff;--bg:#f4f5f7;--soft:#eef0f3;--accent:#1f4fd1;--accent-ink:#fff;--ok:#047857;--warn:#9a3412}
+@media (prefers-color-scheme: dark){:root{--ink:#e7e9ee;--muted:#9aa3b2;--line:#2c323d;--card:#171b22;--bg:#0f1217;--soft:#1e232c;--accent:#7f9cff;--accent-ink:#0f1217;--ok:#6ee7b7;--warn:#fdba74}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:24px 16px 64px}
+header.top{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+header.top h1{font-size:22px;margin:0}
+header.top p{margin:0;color:var(--muted)}
+.privacy{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--ok);margin:4px 0 18px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.panel h2{font-size:15px;margin:0 0 10px}
+.drop{border:2px dashed var(--line);border-radius:10px;padding:22px;text-align:center;color:var(--muted);transition:border-color .15s,background .15s}
+.drop.over{border-color:var(--accent);background:var(--soft)}
+.drop b{color:var(--ink)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+button,.btn{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:6px 12px;cursor:pointer}
+button:hover,.btn:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+button.link{border:none;background:none;color:var(--muted);padding:2px 6px}
+input[type=file]{display:none}
+.samples{margin-top:12px;font-size:13px;color:var(--muted)}
+.samples button{font-size:13px;padding:3px 10px}
+.file{border-top:1px solid var(--line);padding:12px 0 4px}
+.file:first-child{border-top:none;padding-top:0}
+.file .name{font-weight:600;word-break:break-all}
+.file .fmt{font-size:12px;color:var(--muted)}
+.tag{display:inline-block;font-size:12px;border-radius:999px;padding:0 8px;background:var(--soft);color:var(--muted)}
+details summary{cursor:pointer;color:var(--accent);font-size:13px;margin-top:6px}
+.map{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px 14px;margin-top:10px}
+.map label{display:flex;flex-direction:column;font-size:12px;color:var(--muted);gap:2px}
+select{font:inherit;font-size:13px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);max-width:100%}
+.exportbar{position:sticky;top:0;z-index:2;display:none;gap:8px;align-items:center;flex-wrap:wrap;background:var(--bg);padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:8px}
+.exportbar.show{display:flex}
+.exportbar .sp{flex:1}
+#report{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px}
+#report:empty{display:none}
+.empty{color:var(--muted);text-align:center;padding:28px 0}
+.err{color:var(--warn);font-size:13px;margin-top:8px}
+@media print{
+  body{background:#fff}
+  .wrap{padding:0;max-width:none}
+  .no-print{display:none!important}
+  #report{border:none;padding:0}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top no-print">
+    <h1>SizeFit</h1>
+    <p>上传 Shopify 订单 / 退货导出，找出哪个款哪个尺码偏大或偏小</p>
+  </header>
+  <div class="privacy no-print">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="flex:none;margin-top:2px"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+    <span>全部在你的浏览器里处理，文件不会上传到任何服务器。买家姓名、邮箱、地址、电话等列在读取时就被丢弃，不保存、不出现在报告里。</span>
+  </div>
+
+  <section class="panel no-print">
+    <h2>1. 上传导出文件</h2>
+    <div class="drop" id="drop">
+      <p>把 CSV 拖到这里，或 <button type="button" class="primary" id="pick">选择文件</button></p>
+      <p style="margin:0;font-size:13px">支持 Shopify 订单导出、Shopify Returns 报表、AfterShip Returns、Loop，其他工具的 CSV 可手动指定列。可以一次传多份（例如订单 + 退货）。</p>
+      <input type="file" id="fileInput" accept=".csv,text/csv" multiple>
+    </div>
+    <div class="samples">没有数据？试试样例：
+      <button type="button" data-sample="shopify_orders_export.csv">Shopify 订单导出</button>
+      <button type="button" data-sample="aftership_returns_export.csv">AfterShip 退货</button>
+      <button type="button" data-sample="shopify_orders_export.csv,loop_returns.csv">订单 + Loop 退货</button>
+      <button type="button" data-sample="dirty_returns.csv">原因多为 Other 的脏数据</button>
+    </div>
+  </section>
+
+  <section class="panel no-print" id="filesPanel" hidden>
+    <h2>2. 已识别的文件</h2>
+    <div id="files"></div>
+  </section>
+
+  <section class="panel no-print">
+    <h2>3. 尺码表（可选）</h2>
+    <div class="row">
+      <button type="button" id="pickChart">上传尺码表 CSV</button>
+      <button type="button" class="link" data-sample-chart="size_chart.csv">用样例尺码表</button>
+      <span id="chartInfo" class="fmt"></span>
+      <input type="file" id="chartInput" accept=".csv,text/csv">
+    </div>
+    <p class="fmt" style="margin:8px 0 0">格式：<code>Product, Size, Chest (cm), Waist (cm) …</code>。Product 列可省略（对所有款生效）。没有尺码表时，建议只给方向。</p>
+  </section>
+
+  <div class="exportbar no-print" id="exportbar">
+    <b>报告</b><span class="sp"></span>
+    <button type="button" id="dlHtml">下载 HTML</button>
+    <button type="button" id="print">打印 / 存为 PDF</button>
+  </div>
+  <div id="report"></div>
+  <p class="empty no-print" id="empty">上传文件后，报告会出现在这里。</p>
+</div>
+<script type="module" src="src/app.js"></script>
+</body>
+</html>
