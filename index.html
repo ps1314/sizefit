@@ -74,6 +74,8 @@ select{font:inherit;font-size:13px;padding:5px 7px;border:1px solid var(--line);
 .empty{color:var(--muted);text-align:center;padding:28px 0}
 .waitlist{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--card);border:1px solid var(--accent);border-radius:14px;padding:20px;margin-top:16px}
 .waitlist[hidden]{display:none}
+body{counter-reset:step}
+h2.step::before{counter-increment:step;content:counter(step) ". "}
 .waitlist p{margin:4px 0 0;color:var(--muted);font-size:14px;max-width:600px}
 .waitlist button{white-space:normal;text-align:left}
 .err{color:var(--warn);font-size:13px;margin-top:8px}
@@ -124,7 +126,7 @@ select{font:inherit;font-size:13px;padding:5px 7px;border:1px solid var(--line);
   </section>
 
   <section class="panel no-print" id="upload">
-    <h2 data-i18n="app.uploadTitle"></h2>
+    <h2 class="step" data-i18n="app.uploadTitle"></h2>
     <div class="drop" id="drop">
       <p><span data-i18n="app.dropPrompt"></span> <button type="button" class="primary" id="pick" data-i18n="app.pick"></button></p>
       <p style="margin:0;font-size:14px" data-i18n="app.supported"></p>
@@ -147,12 +149,12 @@ select{font:inherit;font-size:13px;padding:5px 7px;border:1px solid var(--line);
     </details>
   </section>
   <section class="panel no-print" id="filesPanel" hidden>
-    <h2 data-i18n="app.filesTitle"></h2>
+    <h2 class="step" data-i18n="app.filesTitle"></h2>
     <div id="files"></div>
   </section>
 
   <section class="panel no-print">
-    <h2 data-i18n="app.chartTitle"></h2>
+    <h2 class="step" data-i18n="app.chartTitle"></h2>
     <div class="row">
       <button type="button" id="pickChart" data-i18n="app.chartUpload"></button>
       <button type="button" class="link" data-sample-chart="size_chart.csv" data-i18n="app.chartSample"></button>
