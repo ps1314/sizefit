@@ -2,6 +2,7 @@
 export const CONFIG = {
   // GoatCounter site code: "mysite" for https://mysite.goatcounter.com. Empty = no analytics script is loaded.
   goatcounterCode: 'sizefit-app',
-  // Waitlist form (e.g. a Tally link). Empty = the waitlist button is hidden.
-  waitlistUrl: 'https://tally.so/r/4aBRxk',
+  // Waitlist form (e.g. a Tally link), a string or { zh, en }. Empty = the waitlist button is hidden.
+  // One form per UI language; the page opens the one matching the current language.
+  waitlistUrl: { zh: 'https://tally.so/r/xVjE5o', en: 'https://tally.so/r/4aBRxk' },
 };

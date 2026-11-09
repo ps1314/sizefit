@@ -14,8 +14,11 @@ const state = { files: [], chartText: '', chartName: '', analysis: null, lang: i
 const T = (key, params) => t(state.lang, key, params);
 
 if (trackingEnabled) $('#analyticsNote').hidden = false;
-const waitlistUrl = (CONFIG.waitlistUrl || '').trim();
-const waitlistOn = /^https:\/\//.test(waitlistUrl);
+const waitlistUrlFor = lang => {
+  const w = CONFIG.waitlistUrl || '';
+  return (typeof w === 'string' ? w : w[lang] || w.en || '').trim();
+};
+const waitlistOn = /^https:\/\//.test(waitlistUrlFor('en')) || /^https:\/\//.test(waitlistUrlFor('zh'));
 
 const style = document.createElement('style');
 style.textContent = REPORT_CSS;
@@ -250,7 +253,7 @@ $('#waitlistBtn').addEventListener('click', () => {
   if (!waitlistOn) return;
   track('waitlist');
   // Tally hidden field "lang" records which UI language the visitor used.
-  const url = new URL(waitlistUrl);
+  const url = new URL(waitlistUrlFor(state.lang));
   url.searchParams.set('lang', state.lang);
   window.open(url.href, '_blank', 'noopener');
 });
