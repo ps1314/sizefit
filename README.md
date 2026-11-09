@@ -1,5 +1,18 @@
 # SizeFit
 
+**Find out which sizes of which products run small or large — from the CSV exports you already have.**
+
+SizeFit is a free, browser-only tool for apparel stores on Shopify. Drop in your Shopify order export and/or a returns export (Shopify Returns report, AfterShip Returns, Loop, or any CSV via manual column mapping). It reads exchange direction (S → M means S runs small), return reasons in English and Chinese, and return rates, then tells you for every product × size whether it runs small, runs large, fits, needs a closer look, or doesn't have enough data yet. You get a ranked list of problem products, a fit note you can paste on the product page ("Runs small — we recommend sizing up."), and size-chart change suggestions.
+
+- Runs entirely in your browser: files are never uploaded. Buyer names, emails, addresses and phone numbers are dropped as soon as the file is read.
+- No sign-up, no app install. Try it with the bundled sample data.
+- Report export to HTML or PDF.
+- The interface is currently in Chinese; fit notes are in English.
+
+Run locally: `npm start`, then open http://localhost:5173. Tests: `npm test`. No dependencies.
+
+---
+
 服装卖家上传 Shopify 的订单 / 退货导出 CSV，工具按「款式 × 尺码」判断每个码偏大、偏小还是正常，并给出：
 
 - 问题款排行
@@ -30,7 +43,18 @@ node scripts/cli-report.js --chart fixtures/size_chart.csv --out report.html \
   fixtures/shopify_orders_export.csv fixtures/loop_returns.csv
 ```
 
-以后要放到免费静态托管（GitHub Pages、Cloudflare Pages、Netlify 等），直接发布整个目录即可，`serve.js` 只是本地用的。
+### 发布到 GitHub Pages
+
+仓库根目录就是静态站：Pages 选 `master` 分支、`/`（root）即可，`serve.js` 只是本地用的。页面里的路径全是相对路径（`src/`、`fixtures/`），在 `https://<用户名>.github.io/sizefit/` 这样的子路径下也能用。根目录的 `.nojekyll` 让 Pages 原样发布文件。
+
+### 配置（`src/config.js`）
+
+| 配置 | 作用 | 留空时 |
+|---|---|---|
+| `goatcounterCode` | GoatCounter 站点代码（`xxx` 对应 `https://xxx.goatcounter.com`）。无 cookie 的使用统计 | 不加载任何统计脚本 |
+| `waitlistUrl` | 候补名单外部表单链接（如 Tally，需 `https://` 开头） | 报告下方的「每月自动出尺码报告 $19/月 · 加入候补名单」按钮隐藏 |
+
+开了统计后会记录这些事件（只有事件名，不含文件名和文件内容）：页面打开（GoatCounter 自带的页面浏览）、`upload`、`format/<格式>`、`rows/<50|50-500|500+>`（每个文件的行数分桶）、`report`、`export/html`、`export/pdf`、`sample/<样例名>`、`waitlist`。开启后页面顶部的隐私说明会自动加一句统计说明。
 
 ## 支持的导出格式
 
@@ -94,7 +118,7 @@ fit note：判定偏差的尺码占已判定尺码的一半以上时写 `Runs sm
 
 ## 隐私
 
-- 所有处理都在浏览器里完成，文件不上传；页面除了加载自带样例外没有任何网络请求。
+- 所有处理都在浏览器里完成，文件不上传；页面除了加载自带样例、以及配置了 GoatCounter 时发送匿名事件名之外，没有任何网络请求。
 - 读取 CSV 后立即丢掉个人信息列：姓名、邮箱、电话、地址/街道/城市/邮编/省/国家、公司、客户列、订单备注、标签、物流单号、图片、设备号、支付号等（规则见 `src/formats.js` 的 `isPiiHeader`）。只有 Shopify 订单导出里的 `Name`（订单号 `#1001`）在确认全是订单号时保留。
 - 顾客 / 客服的退货备注只在内存里用于分类，不出现在报告和导出里。
 - 报告里只有商品名、尺码和计数。端到端测试会把样例里每个个人信息值逐个在报告 HTML 里搜一遍，确保没有泄漏。
@@ -137,6 +161,9 @@ src/formats.js      格式识别、列映射、丢弃个人信息列
 src/analyze.js      汇总和判断规则、fit note、尺码表建议
 src/report.js       报告 HTML
 src/app.js          浏览器交互
+src/config.js       统计代码、候补名单链接（留空即关闭）
+src/track.js        GoatCounter 事件
+try/posts.md        推广帖草稿
 serve.js            本地静态服务
 scripts/            样例生成、命令行报告
 test/               单元测试和端到端测试

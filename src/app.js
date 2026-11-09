@@ -4,9 +4,15 @@
 import { loadFile, ROLES, FORMATS, guessKind } from './formats.js';
 import { analyze } from './analyze.js';
 import { renderReport, renderReportDocument, REPORT_CSS } from './report.js';
+import { CONFIG } from './config.js';
+import { track, trackingEnabled, rowBucket } from './track.js';
 
 const $ = sel => document.querySelector(sel);
 const state = { files: [], chartText: '', chartName: '', analysis: null };
+
+if (trackingEnabled) $('#analyticsNote').hidden = false;
+const waitlistUrl = (CONFIG.waitlistUrl || '').trim();
+const waitlistOn = /^https:\/\//.test(waitlistUrl);
 
 const style = document.createElement('style');
 style.textContent = REPORT_CSS;
@@ -20,14 +26,21 @@ const readText = file => new Promise((resolve, reject) => {
 });
 
 async function addFiles(list) {
+  let added = 0;
   for (const f of list) {
     try {
-      state.files.push(loadFile(f.name, await readText(f)));
+      const loaded = loadFile(f.name, await readText(f));
+      state.files.push(loaded);
+      added++;
+      track('upload');
+      track(`format/${loaded.format}`);
+      track(`rows/${rowBucket(loaded.rows.length)}`);
     } catch (e) {
       alert(`${f.name} 读取失败：${e.message}`);
     }
   }
   refresh();
+  if (added) track('report');
 }
 
 async function loadSample(names) {
@@ -36,7 +49,9 @@ async function loadSample(names) {
     const text = await (await fetch(`fixtures/${n}`)).text();
     state.files.push(loadFile(n, text));
   }
+  track(`sample/${names.map(n => n.replace(/\.csv$/, '')).join('+')}`);
   refresh();
+  track('report');
 }
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -76,6 +91,7 @@ function renderOutput() {
   const ready = state.files.length > 0;
   $('#exportbar').classList.toggle('show', ready);
   $('#empty').hidden = ready;
+  $('#waitlist').hidden = !(ready && waitlistOn);
   if (!ready) { $('#report').innerHTML = ''; state.analysis = null; return; }
   state.analysis = analyze(state.files, { chartText: state.chartText });
   $('#report').innerHTML = renderReport(state.analysis);
@@ -150,5 +166,14 @@ $('#dlHtml').addEventListener('click', () => {
   a.download = `sizefit-report-${new Date().toISOString().slice(0, 10)}.html`;
   a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  track('export/html');
 });
-$('#print').addEventListener('click', () => window.print());
+$('#print').addEventListener('click', () => {
+  track('export/pdf');
+  window.print();
+});
+$('#waitlistBtn').addEventListener('click', () => {
+  if (!waitlistOn) return;
+  track('waitlist');
+  window.open(waitlistUrl, '_blank', 'noopener');
+});

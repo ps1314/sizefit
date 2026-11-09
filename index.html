@@ -43,6 +43,11 @@ select{font:inherit;font-size:13px;padding:4px 6px;border:1px solid var(--line);
 #report{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px}
 #report:empty{display:none}
 .empty{color:var(--muted);text-align:center;padding:28px 0}
+.waitlist{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--card);border:1px solid var(--accent);border-radius:12px;padding:16px;margin-top:14px}
+.waitlist[hidden]{display:none}
+.waitlist p{margin:4px 0 0;color:var(--muted);font-size:13px;max-width:560px}
+.waitlist strong{color:var(--ink)}
+.waitlist button{white-space:normal;text-align:left}
 .err{color:var(--warn);font-size:13px;margin-top:8px}
 @media print{
   body{background:#fff}
@@ -60,7 +65,7 @@ select{font:inherit;font-size:13px;padding:4px 6px;border:1px solid var(--line);
   </header>
   <div class="privacy no-print">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="flex:none;margin-top:2px"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-    <span>全部在你的浏览器里处理，文件不会上传到任何服务器。买家姓名、邮箱、地址、电话等列在读取时就被丢弃，不保存、不出现在报告里。</span>
+    <span>全部在你的浏览器里处理，文件不会上传到任何服务器。买家姓名、邮箱、地址、电话等列在读取时就被丢弃，不保存、不出现在报告里。<span id="analyticsNote" hidden>页面用 GoatCounter 做匿名使用统计（无 cookie），只记录「上传了文件、识别出什么格式、大约多少行、导出了报告」这类事件，不记录文件名和文件内容。</span></span>
   </div>
 
   <section class="panel no-print">
@@ -100,6 +105,13 @@ select{font:inherit;font-size:13px;padding:4px 6px;border:1px solid var(--line);
     <button type="button" id="print">打印 / 存为 PDF</button>
   </div>
   <div id="report"></div>
+  <section class="waitlist no-print" id="waitlist" hidden>
+    <div>
+      <b>想每个月自动收到这份报告？</b>
+      <p>连上店铺后每月自动出一次尺码报告，新出现的偏大偏小会提醒你。<strong>目前完全免费，不收钱</strong>；点按钮只是登记意向，会打开一个外部表单。</p>
+    </div>
+    <button type="button" class="primary" id="waitlistBtn">每月自动出尺码报告 $19/月 · 加入候补名单</button>
+  </section>
   <p class="empty no-print" id="empty">上传文件后，报告会出现在这里。</p>
 </div>
 <script type="module" src="src/app.js"></script>
